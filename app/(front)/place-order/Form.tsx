@@ -1,5 +1,7 @@
 'use client';
 
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -8,13 +10,15 @@ import toast from 'react-hot-toast';
 import useSWRMutation from 'swr/mutation';
 
 import CheckoutSteps from '@/components/checkout/CheckoutSteps';
+import StripeCheckoutForm from '@/components/checkout/StripeCheckoutForm';
+import { useCurrency } from '@/components/header/CurrencyProvider';
 import useCartService from '@/lib/hooks/useCartStore';
 
-import { useCurrency } from '@/components/header/CurrencyProvider';  // Import useCurrency hook
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const Form = () => {
   const router = useRouter();
-  const { currency, convertPrice } = useCurrency();  // Use the currency context
+  const { currency, convertPrice } = useCurrency();
   const {
     paymentMethod,
     shippingAddress,
@@ -26,7 +30,9 @@ const Form = () => {
     clear,
   } = useCartService();
 
-  // mutate data in the backend by calling trigger function
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+
   const { trigger: placeOrder, isMutating: isPlacing } = useSWRMutation(
     `/api/orders/mine`,
     async (url) => {
@@ -45,11 +51,44 @@ const Form = () => {
           totalPrice,
         }),
       });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        setOrderId(data.order._id);
+        toast.success('Order placed successfully');
+  
+        // ✅ If payment method is not Stripe, finalize here
+        if (paymentMethod !== 'Stripe') {
+          clear(); // Clear the cart
+          return router.push(`/order/${data.order._id}`); // Redirect to order page
+        }
+  
+        // ❗ Don't redirect or clear here for Stripe yet (wait for successful payment)
+      } else {
+        toast.error(data.message);
+      }
+    },
+  );
+  
+  const { trigger: updatePaymentStatus, isMutating: isUpdatingPayment } = useSWRMutation(
+    `/api/orders/${orderId}/payment`,
+    async () => {
+      const res = await fetch(`/api/orders/${orderId}/payment`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          paymentStatus: 'Paid',
+        }),
+      });
       const data = await res.json();
       if (res.ok) {
-        clear();
-        toast.success('Order placed successfully');
-        return router.push(`/order/${data.order._id}`);
+        toast.success('Payment successful, your order is confirmed');
+        setPaymentSuccessful(true);
+        clear(); // Now we clear the cart without redirecting
+        return router.push(`/order/${orderId}`); // Now we redirect to the order page
       } else {
         toast.error(data.message);
       }
@@ -63,8 +102,7 @@ const Form = () => {
     if (items.length === 0) {
       return router.push('/');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentMethod, router]);
+  }, [items.length, paymentMethod, router]);
 
   const [mounted, setMounted] = useState(false);
 
@@ -74,11 +112,23 @@ const Form = () => {
 
   if (!mounted) return <>Loading...</>;
 
-  // Calculate the prices in the selected currency
   const convertedItemsPrice = convertPrice(itemsPrice);
   const convertedTaxPrice = convertPrice(taxPrice);
   const convertedShippingPrice = convertPrice(shippingPrice);
   const convertedTotalPrice = convertPrice(totalPrice);
+
+  const handlePaymentSuccess = async () => {
+    if (!orderId) {
+      toast.error("Order ID is missing.");
+      return;
+    }
+
+    try {
+      await updatePaymentStatus();
+    } catch (error) {
+      toast.error("There was an error processing the payment.");
+    }
+  };
 
   return (
     <div>
@@ -148,7 +198,7 @@ const Form = () => {
                         <span>{item.qty}</span>
                       </td>
                       <td>
-                        {currency} {convertPrice(item.price).toFixed(2)} {/* Display price in selected currency */}
+                        {currency} {convertPrice(item.price).toFixed(2)}
                       </td>
                     </tr>
                   ))}
@@ -172,7 +222,7 @@ const Form = () => {
                   <div className=' flex justify-between'>
                     <div>Items</div>
                     <div>
-                      {currency} {convertedItemsPrice.toFixed(2)} {/* Converted items price */}
+                      {currency} {convertedItemsPrice.toFixed(2)}
                     </div>
                   </div>
                 </li>
@@ -180,7 +230,7 @@ const Form = () => {
                   <div className=' flex justify-between'>
                     <div>Tax</div>
                     <div>
-                      {currency} {convertedTaxPrice.toFixed(2)} {/* Converted tax price */}
+                      {currency} {convertedTaxPrice.toFixed(2)}
                     </div>
                   </div>
                 </li>
@@ -188,7 +238,7 @@ const Form = () => {
                   <div className=' flex justify-between'>
                     <div>Shipping</div>
                     <div>
-                      {currency} {convertedShippingPrice.toFixed(2)} {/* Converted shipping price */}
+                      {currency} {convertedShippingPrice.toFixed(2)}
                     </div>
                   </div>
                 </li>
@@ -196,7 +246,7 @@ const Form = () => {
                   <div className=' flex justify-between'>
                     <div>Total</div>
                     <div>
-                      {currency} {convertedTotalPrice.toFixed(2)} {/* Converted total price */}
+                      {currency} {convertedTotalPrice.toFixed(2)}
                     </div>
                   </div>
                 </li>
@@ -213,6 +263,24 @@ const Form = () => {
                     Place Order
                   </button>
                 </li>
+
+                {paymentMethod === 'Stripe' && orderId && !paymentSuccessful && (
+                  <li className='mt-4'>
+                    <h2 className='text-lg font-bold mb-2'>Pay with Stripe</h2>
+                    <Elements stripe={stripePromise}>
+                      <StripeCheckoutForm
+                        totalAmount={convertedTotalPrice}
+                        onPaymentSuccess={handlePaymentSuccess}
+                      />
+                    </Elements>
+                  </li>
+                )}
+
+                {paymentSuccessful && (
+                  <li className='text-green-500'>
+                    Payment successful! Your order has been confirmed.
+                  </li>
+                )}
               </ul>
             </div>
           </div>

@@ -4,6 +4,19 @@ import ProductItem from '@/components/products/ProductItem';
 import { Rating } from '@/components/products/Rating';
 import productServices from '@/lib/services/productService';
 
+// 👇 Add the function here
+function sanitizeProduct(product: any) {
+  return {
+    ...product,
+    _id: product._id.toString(),
+    colors: product.colors?.map((color: any) => ({
+      ...color,
+      _id: color._id.toString(),
+    })),
+    sizes: product.sizes || [],
+  };
+}
+
 const sortOrders = ['newest', 'lowest', 'highest', 'rating'];
 const prices = [
   {
@@ -184,9 +197,9 @@ export default async function SearchPage({
             {rating !== 'all' && ' : Rating ' + rating + ' & up'}
             &nbsp;
             {(q !== 'all' && q !== '') ||
-            category !== 'all' ||
-            rating !== 'all' ||
-            price !== 'all' ? (
+              category !== 'all' ||
+              rating !== 'all' ||
+              price !== 'all' ? (
               <Link className="btn btn-ghost btn-sm" href="/search">
                 Clear
               </Link>
@@ -209,8 +222,9 @@ export default async function SearchPage({
         <div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {products.map((product) => (
-              <ProductItem key={product.slug} product={product} />
+              <ProductItem key={product.slug} product={sanitizeProduct(product)} />
             ))}
+
           </div>
           <div className="join">
             {products.length > 0 &&

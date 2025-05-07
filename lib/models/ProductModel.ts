@@ -1,43 +1,48 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, model, models } from 'mongoose';
 
-export type Product = {
+export interface Product {
   _id?: string;
   name: string;
   slug: string;
   image: string;
-  banner?: string;
   price: number;
-  brand: string;
-  description: string;
   category: string;
+  brand: string;
+  countInStock: number;
+  description: string;
   rating: number;
   numReviews: number;
-  countInStock: number;
-  colors?: [];
-  sizes?: [];
-};
+  isFeatured?: boolean;
+  featuredImage?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  colors?: { name: string; imageUrl: string }[];  // Update colors to be an array of objects with 'name' and 'imageUrl'
+  sizes?: string[];  // Sizes will remain as an array of strings
+}
 
-const productSchema = new mongoose.Schema(
+const ProductSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
-    category: { type: String, required: true },
-    image: { type: String, required: true },
-    price: { type: Number, required: true },
-    brand: { type: String, required: true },
-    rating: { type: Number, required: true, default: 0 },
-    numReviews: { type: Number, required: true, default: 0 },
-    countInStock: { type: Number, required: true, default: 0 },
-    description: { type: String, required: true },
-    isFeatured: { type: Boolean, default: false },
-    banner: String,
+    name: String,
+    slug: String,
+    price: Number,
+    category: String,
+    image: String,
+    brand: String,
+    countInStock: Number,
+    description: String,
+    colors: [
+      {
+        name: { type: String, required: true },
+        imageUrl: { type: String, required: true },
+      }
+    ],
+    
+    sizes: [{ type: String }], // Array of strings for sizes
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-const ProductModel =
-  mongoose.models.Product || mongoose.model('Product', productSchema);
-
+const ProductModel = models.Product || model<Product>('Product', ProductSchema);
 export default ProductModel;

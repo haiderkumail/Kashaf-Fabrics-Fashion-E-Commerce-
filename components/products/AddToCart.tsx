@@ -6,7 +6,13 @@ import { useEffect, useState } from 'react';
 import useCartService from '@/lib/hooks/useCartStore';
 import { OrderItem } from '@/lib/models/OrderModel';
 
-const AddToCart = ({ item }: { item: OrderItem }) => {
+const AddToCart = ({
+  item,
+  disabled = false,
+}: {
+  item: OrderItem;
+  disabled?: boolean;
+}) => {
   const router = useRouter();
   const { items, increase, decrease } = useCartService();
   const [existItem, setExistItem] = useState<OrderItem | undefined>();
@@ -34,6 +40,7 @@ const AddToCart = ({ item }: { item: OrderItem }) => {
       className='btn btn-primary w-full'
       type='button'
       onClick={addToCartHandler}
+      disabled={disabled}
     >
       Add to cart
     </button>

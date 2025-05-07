@@ -1,4 +1,4 @@
-"use client"; // Mark as client-side component
+"use client"; // Mark this file as a client component
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,7 +8,6 @@ import { useCurrency } from '@/components/header/CurrencyProvider';
 import { Product } from '@/lib/models/ProductModel';
 
 import { Rating } from './Rating';
-
 
 const ProductItem = ({ product }: { product: Product }) => {
   const [price, setPrice] = useState<number>(0);
@@ -20,15 +19,19 @@ const ProductItem = ({ product }: { product: Product }) => {
     setPrice(convertedPrice);
   }, [product.price, convertPrice]);
 
+  const isExternalImage = (imagePath: string) => {
+    return imagePath.startsWith('http') || imagePath.startsWith('www');
+  };
+
   return (
     <div className="card mb-4 bg-base-300">
       <figure>
         <Link href={`/product/${product.slug}`} className="relative aspect-square h-full w-full">
           <Image
-            src={product.image || '/default-image.jpg'} // Fallback image if product image is missing
+            src={isExternalImage(product.image) ? product.image : `/images/banner/pics/${product.image}`}
             alt={product.name}
-            placeholder="blur" // Built-in blur-up support in Next.js
-            blurDataURL={product.image} // Use a low-res image for the blur effect
+            placeholder="blur"
+            blurDataURL={isExternalImage(product.image) ? product.image : `/images/banner/pics/${product.image}`}
             width={350}
             height={350}
             className="h-full w-full object-cover"

@@ -9,10 +9,29 @@ export const round2 = (num: number) => {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 };
 
+// export const convertDocToObj = (doc: any) => {
+//   doc._id = doc._id.toString();
+//   return doc;
+// };
+
 export const convertDocToObj = (doc: any) => {
-  doc._id = doc._id.toString();
-  return doc;
+  const obj = {
+    ...doc,
+    _id: doc._id?.toString?.() || doc._id,
+    createdAt: doc.createdAt?.toString?.(),
+    updatedAt: doc.updatedAt?.toString?.(),
+  };
+
+  if (Array.isArray(obj.colors)) {
+    obj.colors = obj.colors.map((color: any) => ({
+      ...color,
+      _id: color._id?.toString?.() || color._id,
+    }));
+  }
+
+  return obj;
 };
+
 
 export const formatNumber = (x: number) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

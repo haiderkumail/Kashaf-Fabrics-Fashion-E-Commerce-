@@ -10,6 +10,8 @@ const serializeProduct = (product: any): Product => ({
   _id: product._id?.toString(),
   createdAt: product.createdAt?.toString(),
   updatedAt: product.updatedAt?.toString(),
+  colors: Array.isArray(product.colors) ? product.colors : [],  // Ensure colors is an array
+  sizes: Array.isArray(product.sizes) ? product.sizes : [],      // Ensure sizes is an array
 });
 
 const getLatest = cache(async () => {

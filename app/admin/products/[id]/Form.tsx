@@ -1,8 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ValidationRule, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
@@ -14,6 +15,7 @@ import { formatId } from '@/lib/utils';
 export default function ProductEditForm({ productId }: { productId: string }) {
   const { data: product, error } = useSWR(`/api/admin/products/${productId}`);
   const router = useRouter();
+
   const { trigger: updateProduct, isMutating: isUpdating } = useSWRMutation(
     `/api/admin/products/${productId}`,
     async (url, { arg }) => {
@@ -28,8 +30,8 @@ export default function ProductEditForm({ productId }: { productId: string }) {
       if (!res.ok) return toast.error(data.message);
 
       toast.success('Product updated successfully');
-      router.push('/admin/products');
-    },
+      router.push(`/product/${data.slug}`);
+    }
   );
 
   const {
@@ -37,7 +39,16 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<Product>();
+    getValues,
+  } = useForm<Product>({
+    defaultValues: {
+      colors: [],
+      sizes: [],
+    },
+  });
+
+  const [colors, setColors] = useState<{ name: string; imageUrl: string }[]>([]);
+  const [sizesText, setSizesText] = useState('');
 
   useEffect(() => {
     if (!product) return;
@@ -49,14 +60,30 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     setValue('brand', product.brand);
     setValue('countInStock', product.countInStock);
     setValue('description', product.description);
+    setColors(product.colors || []);
+    setSizesText((product.sizes || []).join(', '));
   }, [product, setValue]);
 
   const formSubmit = async (formData: any) => {
-    await updateProduct(formData);
+    const sizesArray = sizesText.split(',').map(s => s.trim()).filter(Boolean);
+    await updateProduct({ ...formData, colors, sizes: sizesArray });
+  };
+
+  const handleColorChange = (index: number, key: 'name' | 'imageUrl', value: string) => {
+    const updated = [...colors];
+    updated[index][key] = value;
+    setColors(updated);
+  };
+
+  const addColorField = () => {
+    setColors([...colors, { name: '', imageUrl: '' }]);
+  };
+
+  const removeColorField = (index: number) => {
+    setColors(colors.filter((_, i) => i !== index));
   };
 
   if (error) return error.message;
-
   if (!product) return 'Loading...';
 
   const FormInput = ({
@@ -109,10 +136,9 @@ export default function ProductEditForm({ productId }: { productId: string }) {
         {
           method: 'POST',
           body: formData,
-        },
+        }
       );
       const data = await res.json();
-      console.log(data.secure_url);
       setValue('image', data.secure_url);
       toast.success('File uploaded successfully', {
         id: toastId,
@@ -127,43 +153,92 @@ export default function ProductEditForm({ productId }: { productId: string }) {
   return (
     <div>
       <h1 className='py-4 text-2xl'>Edit Product {formatId(productId)}</h1>
-      <div>
-        <form onSubmit={handleSubmit(formSubmit)}>
-          <FormInput name='Name' id='name' required />
-          <FormInput name='Slug' id='slug' required />
-          <FormInput name='Image' id='image' required />
-          <div className='mb-6 md:flex'>
-            <label className='label md:w-1/5' htmlFor='imageFile'>
-              Upload Image
-            </label>
-            <div className='md:w-4/5'>
-              <input
-                type='file'
-                className='file-input w-full max-w-md'
-                id='imageFile'
-                onChange={uploadHandler}
-              />
-            </div>
+      <form onSubmit={handleSubmit(formSubmit)}>
+        <FormInput name='Name' id='name' required />
+        <FormInput name='Slug' id='slug' required />
+        <FormInput name='Image' id='image' required />
+        <div className='mb-6 md:flex'>
+          <label className='label md:w-1/5' htmlFor='imageFile'>
+            Upload Image
+          </label>
+          <div className='md:w-4/5'>
+            <input
+              type='file'
+              className='file-input w-full max-w-md'
+              id='imageFile'
+              onChange={uploadHandler}
+            />
           </div>
-          <FormInput name='Price' id='price' required />
-          <FormInput name='Category' id='category' required />
-          <FormInput name='Brand' id='brand' required />
-          <FormInput name='Description' id='description' required />
-          <FormInput name='Count In Stock' id='countInStock' required />
+        </div>
+        <FormInput name='Price' id='price' required />
+        <FormInput name='Category' id='category' required />
+        <FormInput name='Brand' id='brand' required />
+        <FormInput name='Description' id='description' required />
+        <FormInput name='Count In Stock' id='countInStock' required />
 
-          <button
-            type='submit'
-            disabled={isUpdating}
-            className='btn btn-primary'
-          >
-            {isUpdating && <span className='loading loading-spinner'></span>}
-            Update
-          </button>
-          <Link className='btn ml-4 ' href='/admin/products'>
-            Cancel
-          </Link>
-        </form>
-      </div>
+        <div className='mb-6 md:flex'>
+          <label className='label md:w-1/5'>Colors</label>
+          <div className='md:w-4/5 space-y-4 max-w-md'>
+            {colors.map((color, index) => (
+              <div key={index} className='flex gap-2 items-center'>
+                <input
+                  type='text'
+                  placeholder='Color Name'
+                  value={color.name}
+                  onChange={e => handleColorChange(index, 'name', e.target.value)}
+                  className='input input-bordered w-1/2'
+                />
+                <input
+                  type='text'
+                  placeholder='Image URL'
+                  value={color.imageUrl}
+                  onChange={e => handleColorChange(index, 'imageUrl', e.target.value)}
+                  className='input input-bordered w-1/2'
+                />
+                <button
+                  type='button'
+                  onClick={() => removeColorField(index)}
+                  className='btn btn-error btn-sm'
+                >
+                  X
+                </button>
+              </div>
+            ))}
+            <button
+              type='button'
+              className='btn btn-outline btn-sm'
+              onClick={addColorField}
+            >
+              Add Color
+            </button>
+          </div>
+        </div>
+
+        <div className='mb-6 md:flex'>
+          <label className='label md:w-1/5'>Sizes</label>
+          <div className='md:w-4/5'>
+            <input
+              type='text'
+              placeholder='e.g. S, M, L, XL'
+              value={sizesText}
+              onChange={e => setSizesText(e.target.value)}
+              className='input input-bordered w-full max-w-md'
+            />
+          </div>
+        </div>
+
+        <button
+          type='submit'
+          disabled={isUpdating}
+          className='btn btn-primary'
+        >
+          {isUpdating && <span className='loading loading-spinner'></span>}
+          Update
+        </button>
+        <Link className='btn ml-4 ' href='/admin/products'>
+          Cancel
+        </Link>
+      </form>
     </div>
   );
 }

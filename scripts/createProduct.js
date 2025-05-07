@@ -70,34 +70,37 @@ var products = [
     //     colors: ['Silver', 'Gold'],
     //     sizes: ['Standard'],
     // },
+    // {
+    //     name: 'Kurta',
+    //     slug: 'trendy-womens-Kurta',
+    //     image: 'https://res.cloudinary.com/generative-ai-demos/image/upload/c_auto,w_1000,ar_0.54,g_auto/v1709925707/samples/c_auto/woman_car_srgx4k.jpg',
+    //     price: 99.99,
+    //     brand: 'Kashaf Fabrics',
+    //     description: 'A stylish Kurta perfect for any outing.',
+    //     category: 'Ready to Wear',
+    //     rating: 4.0,
+    //     numReviews: 110,
+    //     countInStock: 40,
+    //     colors: ['Black', 'Beige', 'Pink'],
+    //     sizes: ['S','M','L'],
+    // },
     {
-        name: 'Kurta',
-        slug: 'trendy-womens-Kurta',
-        image: 'https://res.cloudinary.com/generative-ai-demos/image/upload/c_auto,w_1000,ar_0.54,g_auto/v1709925707/samples/c_auto/woman_car_srgx4k.jpg',
-        price: 99.99,
-        brand: 'Kashaf Fabrics',
-        description: 'A stylish Kurta perfect for any outing.',
-        category: 'Ready to Wear',
-        rating: 4.0,
-        numReviews: 110,
-        countInStock: 40,
-        colors: ['Black', 'Beige', 'Pink'],
-        sizes: ['S','M','L'],
-    },
-    {
-        name: 'Signature',
-        slug: 'signature-fragrance',
-        image: 'https://res.cloudinary.com/generative-ai-demos/image/upload/c_auto,w_1000,ar_0.54,g_auto/v1709925707/samples/c_auto/woman_car_srgx4k.jpg',
+        name: 'Untich Wash and Wear',
+        slug: 'untich-wash-and-wear',
+        image: 'https://res.cloudinary.com/denlscvkr/image/upload/v1746457957/IMG_6328_vcxlbp.jpg', // Correct path
         price: 59.99,
-        brand: 'Scentora',
-        description: 'An elegant fragrance with a long-lasting, refreshing scent.',
-        category: 'Fragrance',
-        rating: 4.8,
+        brand: 'Kashaf Fabrics',
+        description: 'An elegant suit for men.',
+        category: 'Men',
+        rating: 3.9,
         numReviews: 85,
         countInStock: 75,
-        colors: ['Transparent Bottle'],
-        sizes: ['50ml', '100ml']
+        colors: ['Black', 'Navy Blue', 'Charcoal Gray', 'Cream', 'Olive Green', 'Maroon', 'Steel Blue'],
+        sizes: ['XS', 'S', 'M', 'L', 'XL'],
       }
+      
+      
+      
       
 ];
 
