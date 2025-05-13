@@ -1,21 +1,21 @@
+import { Metadata } from 'next';
 import OrderDetails from './OrderDetails';
 
-// Define the type for the props
-interface PageProps {
+type Props = {
   params: {
     id: string;
   };
-}
+};
 
-// Function to generate metadata based on the `id`
-export const generateMetadata = ({ params }: PageProps) => {
+// Properly typed metadata generator for dynamic routes
+export const generateMetadata = ({ params }: Props): Metadata => {
   return {
     title: `Order ${params.id}`,
   };
 };
 
-// Main OrderDetailsPage component
-const OrderDetailsPage = ({ params }: PageProps) => {
+// Page Component with correct typing
+const OrderDetailsPage = ({ params }: Props) => {
   return (
     <OrderDetails
       paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
