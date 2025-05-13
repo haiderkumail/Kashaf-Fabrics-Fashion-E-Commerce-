@@ -75,12 +75,101 @@
   }
 }
 
+/* Responsive Typography */
+@layer components {
+  h1 {
+    @apply text-2xl font-bold;
+  }
+  h2 {
+    @apply text-xl font-semibold;
+  }
+  h3 {
+    @apply text-lg font-medium;
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      @apply text-4xl;
+    }
+    h2 {
+      @apply text-3xl;
+    }
+    h3 {
+      @apply text-2xl;
+    }
+  }
+}
+
+/* Responsive Spacing */
+@layer utilities {
+  .container {
+    @apply mx-auto px-4;
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      @apply px-6;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      @apply px-8;
+    }
+  }
+}
+
+/* Responsive Animations */
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .animate-fade-urdu {
   animation: fadeInOut 7s ease-in-out infinite;
   animation-delay: 4s;
+}
+
+@media (max-width: 768px) {
+  .animate-fade-urdu {
+    animation-duration: 5s; /* Faster animation on smaller screens */
+  }
+}
+
+/* CSS for sliding animation */
+@keyframes slide-left {
+  0% {
+    transform: translateX(100%); /* Start from right */
+  }
+  100% {
+    transform: translateX(-100%); /* Move to left */
+  }
+}
+
+/* Top Sales Bar */
+.sales-bar-top {
+  background-color: #ff4d4d; /* Example background color */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 16px;
+  animation: slide-left 12s linear infinite;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Optional shadow */
+}
+
+/* Bottom Sales Bar */
+.sales-bar-bottom {
+  background-color: #28a745; /* Example background color */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 16px;
+  animation: slide-left 12s linear infinite reverse; /* Reverse the direction for bottom bar */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); /* Optional shadow */
 }

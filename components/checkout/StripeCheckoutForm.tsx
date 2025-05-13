@@ -1,5 +1,3 @@
-// StripeCheckoutForm.tsx
-
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import React from 'react';
 
@@ -35,29 +33,39 @@ const StripeCheckoutForm: React.FC<StripeCheckoutFormProps> = ({ totalAmount, on
   };
 
   const cardElementOptions = {
-    style: {
-      base: {
-        // Define the styles here
-        fontSize: '16px',
-        lineHeight: '24px',
-        color: '#32325d',
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSmoothing: 'antialiased',
-      },
-      invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a',
-      },
+  style: {
+    base: {
+      fontSize: '16px',
+      lineHeight: '24px',
+      color: '#32325d',
+      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+      fontSmoothing: 'antialiased',
+      backgroundColor: '#ffffff', // White background for input
+      padding: '12px', // Optional: adds some spacing
     },
-    hidePostalCode: true, // This removes the zip code field
-  };
+    invalid: {
+      color: '#fa755a',
+      iconColor: '#fa755a',
+    },
+  },
+  hidePostalCode: false,
+};
+
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto">
       <CardElement options={cardElementOptions} />
-      <button type="submit" disabled={!stripe}>
-        Pay {totalAmount}
-      </button>
+
+      {/* Customized Pay Button with theme-based text color */}
+      <div className="flex justify-center mt-4">
+        <button
+          type="submit"
+          disabled={!stripe}
+          className="w-full py-3 rounded-md font-semibold bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all dark:text-white"
+        >
+          Pay {totalAmount.toFixed(2)}
+        </button>
+      </div>
     </form>
   );
 };

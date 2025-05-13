@@ -8,10 +8,9 @@ import useCartService from '@/lib/hooks/useCartStore';
 
 const Form = () => {
   const router = useRouter();
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('Stripe');
 
-  const { savePaymentMethod, paymentMethod, shippingAddress } =
-    useCartService();
+  const { savePaymentMethod, paymentMethod, shippingAddress } = useCartService();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +22,7 @@ const Form = () => {
     if (!shippingAddress) {
       return router.push('/shipping');
     }
-    setSelectedPaymentMethod(paymentMethod || 'PayPal');
+    setSelectedPaymentMethod(paymentMethod || 'Stripe');
   }, [paymentMethod, router, shippingAddress]);
 
   return (
@@ -33,7 +32,7 @@ const Form = () => {
         <div className='card-body'>
           <h1 className='card-title'>Payment Method</h1>
           <form onSubmit={handleSubmit}>
-            {['PayPal', 'Stripe', 'CashOnDelivery'].map((payment) => (
+            {['Stripe', 'CashOnDelivery'].map((payment) => (
               <div key={payment}>
                 <label className='label cursor-pointer'>
                   <span className='label-text'>{payment}</span>

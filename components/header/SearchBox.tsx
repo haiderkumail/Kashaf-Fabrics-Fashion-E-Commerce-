@@ -22,7 +22,8 @@ export const SearchBox = () => {
 
   if (error) return error.message;
 
-  if (isLoading) return <div className='skeleton flex h-12 w-[371px]'></div>;
+  if (isLoading)
+    return <div className='skeleton h-12 w-full max-w-md'></div>;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,13 +31,13 @@ export const SearchBox = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className='join'>
+    <form onSubmit={handleSubmit} className='w-full max-w-md px-2'>
+      <div className='join w-full flex flex-col sm:flex-row gap-2'>
         <select
           name='category'
           defaultValue={formCategory}
           aria-label='Category'
-          className='join-item select select-bordered w-[90px]'
+          className='join-item select select-bordered w-full sm:w-[120px] mb-2 sm:mb-0'
           onChange={(e) => setFormCategory(e.target.value)}
         >
           <option value='all'>All</option>
@@ -47,14 +48,14 @@ export const SearchBox = () => {
           ))}
         </select>
         <input
-          className='input join-item input-bordered w-40 sm:w-44'
+          className='input join-item input-bordered w-full sm:w-56'
           placeholder='Search'
           aria-label='Search'
           defaultValue={q}
           name='q'
           onChange={(e) => setFormQuery(e.target.value)}
         />
-        <button className='btn join-item input-bordered' type='submit'>
+        <button className='btn join-item input-bordered w-full sm:w-auto' type='submit'>
           Search
         </button>
       </div>

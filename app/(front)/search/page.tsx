@@ -4,7 +4,6 @@ import ProductItem from '@/components/products/ProductItem';
 import { Rating } from '@/components/products/Rating';
 import productServices from '@/lib/services/productService';
 
-// 👇 Add the function here
 function sanitizeProduct(product: any) {
   return {
     ...product,
@@ -112,17 +111,93 @@ export default async function SearchPage({
     rating,
     page,
     sort,
+    limit: 4, // ✅ Limit to 8 products per page regardless of screen size
   });
 
+  if (!products) {
+    return <div className="text-center py-10 text-lg">Loading products...</div>;
+  }
+
   return (
-    <div className="grid md:grid-cols-5 md:gap-5">
-      <div>
-        <div className="py-2 text-xl">Categories</div>
-        <div>
+    <div className="container mx-auto px-4">
+      <details className="md:hidden mb-4">
+        <summary className="btn btn-primary btn-block">Filters</summary>
+        <div className="p-4 bg-base-100 rounded-box mt-2 border border-base-300">
+          <div className="mb-6">
+            <div className="font-bold text-lg mb-2">Categories</div>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                className={`btn btn-sm ${'all' === category ? 'btn-primary' : 'btn-ghost'}`}
+                href={getFilterUrl({ c: 'all' })}
+              >
+                Any
+              </Link>
+              {categories.map((c: string) => (
+                <Link
+                  key={c}
+                  className={`btn btn-sm ${c === category ? 'btn-primary' : 'btn-ghost'}`}
+                  href={getFilterUrl({ c })}
+                >
+                  {c}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <div className="font-bold text-lg mb-2">Price</div>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                className={`btn btn-sm ${'all' === price ? 'btn-primary' : 'btn-ghost'}`}
+                href={getFilterUrl({ p: 'all' })}
+              >
+                Any
+              </Link>
+              {prices.map((p) => (
+                <Link
+                  key={p.value}
+                  href={getFilterUrl({ p: p.value })}
+                  className={`btn btn-sm ${p.value === price ? 'btn-primary' : 'btn-ghost'}`}
+                >
+                  {p.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <div className="font-bold text-lg mb-2">Customer Review</div>
+            <div className="flex flex-col gap-2">
+              <Link
+                href={getFilterUrl({ r: 'all' })}
+                className={`btn btn-sm ${'all' === rating ? 'btn-primary' : 'btn-ghost'}`}
+              >
+                Any
+              </Link>
+              {ratings.map((r) => (
+                <Link
+                  key={r}
+                  href={getFilterUrl({ r: `${r}` })}
+                  className={`btn btn-sm ${`${r}` === rating ? 'btn-primary' : 'btn-ghost'}`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Rating value={r} caption={''} />
+                    <span>& up</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <div className="flex flex-col md:grid md:grid-cols-5 md:gap-5">
+        <div className="hidden md:block">
+          <div className="py-2 text-xl">Categories</div>
           <ul>
             <li>
               <Link
-                className={`link-hover link ${'all' === category && 'link-primary'}`}
+                className={`link-hover link ${'all' === category ? 'link-primary font-semibold underline' : ''}`}
                 href={getFilterUrl({ c: 'all' })}
               >
                 Any
@@ -131,7 +206,7 @@ export default async function SearchPage({
             {categories.map((c: string) => (
               <li key={c}>
                 <Link
-                  className={`link-hover link ${c === category && 'link-primary'}`}
+                  className={`link-hover link ${c === category ? 'link-primary font-semibold underline' : ''}`}
                   href={getFilterUrl({ c })}
                 >
                   {c}
@@ -139,108 +214,118 @@ export default async function SearchPage({
               </li>
             ))}
           </ul>
-        </div>
-        <div>
-          <div className="py-2 text-xl">Price</div>
-          <ul>
-            <li>
-              <Link
-                className={`link-hover link ${'all' === price && 'link-primary'}`}
-                href={getFilterUrl({ p: 'all' })}
-              >
-                Any
-              </Link>
-            </li>
-            {prices.map((p) => (
-              <li key={p.value}>
+          <div>
+            <div className="py-2 text-xl">Price</div>
+            <ul>
+              <li>
                 <Link
-                  href={getFilterUrl({ p: p.value })}
-                  className={`link-hover link ${p.value === price && 'link-primary'}`}
+                  className={`link-hover link ${'all' === price ? 'link-primary font-semibold underline' : ''}`}
+                  href={getFilterUrl({ p: 'all' })}
                 >
-                  {p.name}
+                  Any
                 </Link>
               </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <div className="py-2 text-xl">Customer Review</div>
-          <ul className="flex flex-col gap-1">
-            <li>
-              <Link
-                href={getFilterUrl({ r: 'all' })}
-                className={`link-hover link ${'all' === rating && 'link-primary'}`}
-              >
-                Any
-              </Link>
-            </li>
-            {ratings.map((r) => (
-              <li key={r}>
-                <Link
-                  href={getFilterUrl({ r: `${r}` })}
-                  className={`link-hover link ${`${r}` === rating && 'link-primary'}`}
-                >
-                  <Rating caption={' & up'} value={r} />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className="md:col-span-4">
-        <div className="flex flex-col justify-between py-4 md:flex-row">
-          <div className="flex items-center">
-            {products.length === 0 ? 'No' : countProducts} Results
-            {q !== 'all' && q !== '' && ' : ' + q}
-            {category !== 'all' && ' : ' + category}
-            {price !== 'all' && ' : Price ' + price}
-            {rating !== 'all' && ' : Rating ' + rating + ' & up'}
-            &nbsp;
-            {(q !== 'all' && q !== '') ||
-              category !== 'all' ||
-              rating !== 'all' ||
-              price !== 'all' ? (
-              <Link className="btn btn-ghost btn-sm" href="/search">
-                Clear
-              </Link>
-            ) : null}
+              {prices.map((p) => (
+                <li key={p.value}>
+                  <Link
+                    href={getFilterUrl({ p: p.value })}
+                    className={`link-hover link ${p.value === price ? 'link-primary font-semibold underline' : ''}`}
+                  >
+                    {p.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
           <div>
-            Sort by:{' '}
-            {sortOrders.map((s) => (
-              <Link
-                key={s}
-                className={`link-hover link mx-2 ${sort == s ? 'link-primary' : ''}`}
-                href={getFilterUrl({ s })}
-              >
-                {s}
-              </Link>
-            ))}
+            <div className="py-2 text-xl">Customer Review</div>
+            <ul className="flex flex-col gap-1">
+              <li>
+                <Link
+                  href={getFilterUrl({ r: 'all' })}
+                  className={`link-hover link ${'all' === rating ? 'link-primary font-semibold underline' : ''}`}
+                >
+                  Any
+                </Link>
+              </li>
+              {ratings.map((r) => (
+                <li key={r}>
+                  <Link
+                    href={getFilterUrl({ r: `${r}` })}
+                    className={`link-hover link ${`${r}` === rating ? 'link-primary font-semibold underline' : ''}`}
+                  >
+                    <Rating caption={' & up'} value={r} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {products.map((product) => (
-              <ProductItem key={product.slug} product={sanitizeProduct(product)} />
-            ))}
-
-          </div>
-          <div className="join">
-            {products.length > 0 &&
-              Array.from(Array(pages).keys()).map((p) => (
+        <div className="md:col-span-4">
+          <div className="flex flex-col justify-between py-4 md:flex-row">
+            <div className="flex items-center flex-wrap gap-2 mb-2 md:mb-0">
+              {products.length === 0 ? 'No' : countProducts} Results
+              {q !== 'all' && q !== '' && ' : ' + q}
+              {category !== 'all' && ' : ' + category}
+              {price !== 'all' && ' : Price ' + price}
+              {rating !== 'all' && ' : Rating ' + rating + ' & up'}
+              {(q !== 'all' && q !== '') ||
+                category !== 'all' ||
+                rating !== 'all' ||
+                price !== 'all' ? (
+                <Link className="btn btn-ghost btn-sm" href="/search">
+                  Clear
+                </Link>
+              ) : null}
+            </div>
+            <div className="flex flex-wrap gap-2 items-center">
+              <span className="text-sm md:text-base">Sort by:</span>
+              {sortOrders.map((s) => (
                 <Link
-                  key={p}
-                  className={`btn join-item ${Number(page) === p + 1 ? 'btn-active' : ''}`}
-                  href={getFilterUrl({ pg: `${p + 1}` })}
+                  key={s}
+                  className={`btn btn-sm ${sort === s ? 'btn-primary' : 'btn-ghost'}`}
+                  href={getFilterUrl({ s })}
                 >
-                  {p + 1}
+                  {s.charAt(0).toUpperCase() + s.slice(1)}
                 </Link>
               ))}
+            </div>
           </div>
+
+          <div>
+            <div className="w-full max-w-screen-xl mx-auto px-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                {products.map((product) => (
+                  <div key={product.slug} className="flex justify-center">
+                    <div className="w-[150%] sm:w-full">
+                      <ProductItem product={sanitizeProduct(product)} />
+                    </div>
+                  </div>
+
+                ))}
+              </div>
+            </div>
+
+            {/* Pagination */}
+            <div className="join mt-5 flex flex-wrap justify-center">
+              {products.length > 0 &&
+                Array.from(Array(pages).keys()).map((p) => (
+                  <Link
+                    key={p}
+                    className={`btn join-item ${Number(page) === p + 1 ? 'btn-active' : ''}`}
+                    href={getFilterUrl({ pg: `${p + 1}` })}
+                  >
+                    {p + 1}
+                  </Link>
+                ))}
+            </div>
+
+          </div>
+
+
         </div>
       </div>
     </div>
   );
 }
-

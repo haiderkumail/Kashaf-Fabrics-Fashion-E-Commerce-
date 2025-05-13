@@ -26,8 +26,8 @@ const getLatest = cache(async () => {
 const getTopRated = cache(async () => {
   await dbConnect();
   const products = await ProductModel.find({})
-    .sort({ rating: -1 })
-    .limit(8)
+    .sort({ rating: -1 })  // Sorting by rating in descending order to get the top-rated products
+    .limit(8)  // Limit to 8 products
     .lean();
   return products.map(serializeProduct) as Product[];
 });
@@ -52,7 +52,7 @@ const getAll = cache(async () => {
   return products.map(serializeProduct) as Product[];
 });
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 4;
 
 const getByQuery = cache(
   async ({
@@ -69,11 +69,12 @@ const getByQuery = cache(
     rating: string;
     sort: string;
     page: string;
+    limit?: number;
   }) => {
     await dbConnect();
 
     const queryFilter =
-      q && q !== 'all'
+      q && q !== 'all' && q.trim() !== ''
         ? {
             name: {
               $regex: q,
@@ -81,7 +82,9 @@ const getByQuery = cache(
             },
           }
         : {};
+    
     const categoryFilter = category && category !== 'all' ? { category } : {};
+    
     const ratingFilter =
       rating && rating !== 'all'
         ? {
@@ -90,6 +93,7 @@ const getByQuery = cache(
             },
           }
         : {};
+    
     const priceFilter =
       price && price !== 'all'
         ? {

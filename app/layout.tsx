@@ -4,11 +4,11 @@ import './globals.css';
 
 import DrawerButton from '@/components/DrawerButton';
 import Footer from '@/components/footer/Footer';
+import { CurrencyProvider } from '@/components/header/CurrencyProvider';  // Import CurrencyProvider
 import Header from '@/components/header/Header';
 import Providers from '@/components/Providers';
 import Sidebar from '@/components/Sidebar';
 
-import { CurrencyProvider } from '@/components/header/CurrencyProvider';  // Import CurrencyProvider
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 

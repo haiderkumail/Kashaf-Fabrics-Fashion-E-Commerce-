@@ -21,6 +21,13 @@ const Carousel = async () => {
           featuredProducts.map((product) => (
             <CarouselItem key={product._id}>
               <div className="relative h-[304px] lg:h-[536px] overflow-hidden rounded-lg">
+                {/* Sales Bar - Top (Sliding from right to left) */}
+                <div className="absolute top-0 left-0 w-full">
+                  <div className="sales-bar-top animate-slide-left">
+                    Limited Time Offer!
+                  </div>
+                </div>
+
                 <Link href={`/product/${product.slug}`}>
                   <video
                     className="h-full w-full object-cover"
@@ -36,12 +43,27 @@ const Carousel = async () => {
                     Your browser does not support the video tag.
                   </video>
                 </Link>
+
+                {/* Sales Bar - Bottom (Sliding from right to left) */}
+                <div className="absolute bottom-0 left-0 w-full">
+                  <div className="sales-bar-bottom animate-slide-left">
+                    Get 20% Off Today!
+                  </div>
+                </div>
               </div>
             </CarouselItem>
           ))
         ) : (
           <CarouselItem>
-            <div className="relative h-[304px] lg:h-[536px] overflow-hidden rounded-lg">
+            <div className="relative h-[304px] lg:h-[536px] w-screen left-1/2 right-1/2 -translate-x-1/2 overflow-hidden">
+
+              {/* Sales Bar - Top (Sliding from right to left) */}
+              <div className="absolute top-0 left-0 w-full">
+                <div className="sales-bar-top animate-slide-left">
+                  Limited Time Offer!
+                </div>
+              </div>
+
               <video
                 className="h-full w-full object-cover"
                 width={1500}
@@ -55,6 +77,13 @@ const Carousel = async () => {
                 <source src="/images/banner/video.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
+
+              {/* Sales Bar - Bottom (Sliding from right to left) */}
+              <div className="absolute bottom-0 left-0 w-full">
+                <div className="sales-bar-bottom animate-slide-left">
+                  Get 20% Off Today!
+                </div>
+              </div>
 
               {/* Overlay text */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black/30 px-4">
@@ -79,9 +108,6 @@ const Carousel = async () => {
                 >
                   Shop Now
                 </Link>
-
-
-
               </div>
             </div>
           </CarouselItem>
@@ -96,5 +122,5 @@ const Carousel = async () => {
 export default Carousel;
 
 export const CarouselSkeleton = () => {
-  return <div className='skeleton h-[304px] w-full rounded-lg lg:h-[536px]' />;
+  return <div className="skeleton h-[304px] w-full rounded-lg lg:h-[536px]" />;
 };

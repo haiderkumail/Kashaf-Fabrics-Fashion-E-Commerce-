@@ -17,7 +17,8 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
   colors?: { name: string; imageUrl: string }[];  // Update colors to be an array of objects with 'name' and 'imageUrl'
-  sizes?: string[];  // Sizes will remain as an array of strings
+  sizes?: string[];
+  averageRating: number; // average from all users
 }
 
 const ProductSchema = new mongoose.Schema(
@@ -30,6 +31,8 @@ const ProductSchema = new mongoose.Schema(
     brand: String,
     countInStock: Number,
     description: String,
+    averageRating: Number,
+    numReviewa: Number,
     colors: [
       {
         name: { type: String, required: true },
