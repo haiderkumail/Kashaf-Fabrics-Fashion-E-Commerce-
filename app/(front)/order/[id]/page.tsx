@@ -1,13 +1,21 @@
 import OrderDetails from './OrderDetails';
 
-export const generateMetadata = ({ params }: { params: { id: string } }) => {
-  // Return metadata directly based on the resolved params
+// Define the type for the props
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
+
+// Function to generate metadata based on the `id`
+export const generateMetadata = ({ params }: PageProps) => {
   return {
     title: `Order ${params.id}`,
   };
 };
 
-const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
+// Main OrderDetailsPage component
+const OrderDetailsPage = ({ params }: PageProps) => {
   return (
     <OrderDetails
       paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
