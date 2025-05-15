@@ -3,7 +3,7 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 
 // Define available currencies
-type Currency = 'USD' | 'PKR' | 'GBP';
+type Currency = 'PKR' | 'USD' | 'GBP';
 
 interface CurrencyContextType {
   currency: Currency;

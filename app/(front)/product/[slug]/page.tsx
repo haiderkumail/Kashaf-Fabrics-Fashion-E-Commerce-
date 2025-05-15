@@ -10,7 +10,8 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 export const dynamicParams = true;
 
-
+// const product = await productService.getBySlug(slug);
+// const topRated = await productService.getTopRated();
 
 export async function generateStaticParams() {
   const products = await productService.getAll();
@@ -20,7 +21,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const slug = params.slug;  // No need to await here
+  const slug = params.slug;
   const product = await productService.getBySlug(slug);
 
   if (!product) {
@@ -36,13 +37,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-
 const ProductPage = async ({ params }: { params: { slug: string } }) => {
-  const slug = params.slug; // No need to await here
+  const slug = params.slug;
   const product = await productService.getBySlug(slug);
 
   if (!product) {
-    notFound(); // This will trigger a 404 page if product is not found
+    notFound();
   }
 
   const buffer = await fetch(product.image).then(async (res) =>
@@ -50,7 +50,15 @@ const ProductPage = async ({ params }: { params: { slug: string } }) => {
   );
   const { base64 } = await getPlaiceholder(buffer);
 
-  return <ProductClient product={convertDocToObj(product)} base64={base64} />;
+  const topRated = await productService.getTopRated();
+
+  return (
+  <ProductClient
+    product={convertDocToObj(product)}
+    base64={base64}
+    topRated={topRated.map(convertDocToObj)}
+  />
+  );
 };
 
 export default ProductPage;

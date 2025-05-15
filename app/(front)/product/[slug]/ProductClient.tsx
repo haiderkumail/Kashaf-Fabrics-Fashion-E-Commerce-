@@ -7,8 +7,15 @@ import { useState } from 'react';
 import AddToCart from '@/components/products/AddToCart';
 import ProductPrice from '@/components/products/ProductPrice';
 import { Rating } from '@/components/products/Rating';
+import Slider from '@/components/slider/Slider';
 
-export default function ProductClient({ product, base64 }: any) {
+type ProductClientProps = {
+  product: any;
+  base64: string;
+  topRated: any[]; // 👈 Add this to accept top rated products
+};
+
+export default function ProductClient({ product, base64, topRated }: ProductClientProps) {
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
 
@@ -20,17 +27,13 @@ export default function ProductClient({ product, base64 }: any) {
     (!hasColors || selectedColor) &&
     (!hasSizes || selectedSize);
 
-  // Function to dynamically fetch the image URL based on the selected color or default image
   const getProductImage = () => {
-    // If a color is selected, show the corresponding color image
     if (selectedColor && product.colors) {
       const color = product.colors.find((c: any) => c.name === selectedColor);
       return color?.imageUrl || product.image;
     }
-    // Otherwise, show the default product image
     return product.image;
   };
-  
 
   return (
     <div className="my-2">
@@ -38,10 +41,10 @@ export default function ProductClient({ product, base64 }: any) {
         <Link href="/" className="btn">{`<- Back to Products`}</Link>
       </div>
       <div className="grid gap-4 md:grid-cols-4">
-        {/* Large Product Image */}
+        {/* Product Image */}
         <div className="relative aspect-square md:col-span-2">
           <Image
-            src={getProductImage()} // Dynamic image URL based on selected color or default image
+            src={getProductImage()}
             alt={product.name}
             placeholder="blur"
             blurDataURL={base64}
@@ -52,33 +55,27 @@ export default function ProductClient({ product, base64 }: any) {
           />
         </div>
 
-        {/* Product Details */}
+        {/* Product Info */}
         <div>
           <ul className="space-y-4">
-            <li>
-              <h1 className="text-xl">{product.name}</h1>
-            </li>
-            <li>
-              <Rating value={product.rating} caption={`${product.numReviews} ratings`} />
-            </li>
+            <li><h1 className="text-xl">{product.name}</h1></li>
+            <li><Rating value={product.rating} caption={`${product.numReviews} ratings`} /></li>
             <li>{product.brand}</li>
-            <li>
-              <div className="divider"></div>
-            </li>
-            <li>
-              <p>Description: {product.description}</p>
-            </li>
+            <li><div className="divider"></div></li>
+            <li><p>Description: {product.description}</p></li>
 
-            {/* Color Selection */}
+            {/* Colors */}
             {hasColors && (
               <li>
                 <div className="mt-2">
                   <label className="font-semibold">Color:</label>
                   <div className="flex flex-wrap gap-3 mt-2">
-                    {product.colors.map((color: { name: string; imageUrl: string }, index: number) => (
+                    {product.colors.map((color: any, index: number) => (
                       <button
-                        key={color.name || index} // Ensure the key is unique
-                        className={`flex flex-col items-center justify-center rounded border p-1 transition duration-150 ${selectedColor === color.name ? 'ring-2 ring-primary' : ''}`}
+                        key={color.name || index}
+                        className={`flex flex-col items-center justify-center rounded border p-1 transition duration-150 ${
+                          selectedColor === color.name ? 'ring-2 ring-primary' : ''
+                        }`}
                         onClick={() => setSelectedColor(color.name)}
                         type="button"
                       >
@@ -99,7 +96,7 @@ export default function ProductClient({ product, base64 }: any) {
               </li>
             )}
 
-            {/* Size Selection */}
+            {/* Sizes */}
             {hasSizes && (
               <li>
                 <div className="mt-2">
@@ -107,8 +104,10 @@ export default function ProductClient({ product, base64 }: any) {
                   <div className="flex flex-wrap gap-2 mt-1">
                     {product.sizes.map((size: string, index: number) => (
                       <button
-                        key={size || index} // Ensure the key is unique
-                        className={`px-3 py-1 rounded border ${selectedSize === size ? 'bg-primary text-white' : 'bg-base-200'}`}
+                        key={size || index}
+                        className={`px-3 py-1 rounded border ${
+                          selectedSize === size ? 'bg-primary text-white' : 'bg-base-200'
+                        }`}
                         onClick={() => setSelectedSize(size)}
                         type="button"
                       >
@@ -122,7 +121,7 @@ export default function ProductClient({ product, base64 }: any) {
           </ul>
         </div>
 
-        {/* Add to Cart and Pricing */}
+        {/* Add to Cart */}
         <div>
           <div className="card mt-3 bg-base-300 shadow-xl md:mt-0">
             <div className="card-body">
@@ -149,6 +148,7 @@ export default function ProductClient({ product, base64 }: any) {
                   />
                 </div>
               )}
+
               {!isReadyToAdd && (
                 <p className="text-sm text-error text-center mt-2">
                   Please select {hasColors && 'color'} {hasColors && hasSizes && 'and'} {hasSizes && 'size'} to add to cart.
@@ -157,6 +157,12 @@ export default function ProductClient({ product, base64 }: any) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* 🔥 Top Rated Slider */}
+      <div className="mt-10">
+        {/* <h2 className="text-2xl font-bold mb-4 text-center">Top Rated Products</h2> */}
+        <Slider products={topRated} />
       </div>
     </div>
   );

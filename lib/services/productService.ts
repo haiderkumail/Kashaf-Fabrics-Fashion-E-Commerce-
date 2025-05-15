@@ -52,7 +52,7 @@ const getAll = cache(async () => {
   return products.map(serializeProduct) as Product[];
 });
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 12;
 
 const getByQuery = cache(
   async ({

@@ -1,23 +1,25 @@
 import ProductItem from '@/components/products/ProductItem';
 import CardSlider from '@/components/slider/CardSlider';
 import { CarouselItem } from '@/components/ui/carousel';
-import productService from '@/lib/services/productService';
-import { convertDocToObj } from '@/lib/utils';
 
-const Slider = async () => {
-  const topRated = await productService.getTopRated();
+type SliderProps = {
+  products: any[];
+};
 
+const Slider = ({ products }: SliderProps) => {
   return (
     <div>
-      <h2 className="my-2 text-2xl md:my-4">Top Rated</h2>
+      <h2 className="my-4 text-3xl font-extrabold text-center tracking-wide font-[cursive]">
+  Related Products
+</h2>
+
       <CardSlider>
-        {/* Wrap for SSR */}
-        {topRated.map((product) => (
+        {products.map((product) => (
           <CarouselItem
             key={product.slug}
             className="basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
           >
-            <ProductItem product={convertDocToObj(product)} />
+            <ProductItem product={product} />
           </CarouselItem>
         ))}
       </CardSlider>

@@ -14,23 +14,20 @@ export const round2 = (num: number) => {
 //   return doc;
 // };
 
-export const convertDocToObj = (doc: any) => {
-  const obj = {
+export function convertDocToObj(doc: any) {
+  return {
     ...doc,
-    _id: doc._id?.toString?.() || doc._id,
+    _id: doc._id?.toString?.(),
     createdAt: doc.createdAt?.toString?.(),
     updatedAt: doc.updatedAt?.toString?.(),
-  };
-
-  if (Array.isArray(obj.colors)) {
-    obj.colors = obj.colors.map((color: any) => ({
+    colors: doc.colors?.map((color: any) => ({
       ...color,
-      _id: color._id?.toString?.() || color._id,
-    }));
-  }
+      _id: color._id?.toString?.(),
+    })),
+    sizes: doc.sizes || [],
+  };
+}
 
-  return obj;
-};
 
 
 export const formatNumber = (x: number) => {

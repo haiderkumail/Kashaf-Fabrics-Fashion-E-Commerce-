@@ -105,12 +105,14 @@ const OrderDetails = ({ orderId, paypalClientId }: IOrderDetails) => {
                 {shippingAddress.address}, {shippingAddress.city},{' '}
                 {shippingAddress.postalCode}, {shippingAddress.country}
               </p>
+              <p>Phone: {shippingAddress.phoneNumber}</p>
               {isDelivered ? (
                 <div className="text-success">Delivered at {deliveredAt}</div>
               ) : (
                 <div className="text-error">Not Delivered</div>
               )}
             </div>
+
           </div>
 
           {/* Payment Method */}

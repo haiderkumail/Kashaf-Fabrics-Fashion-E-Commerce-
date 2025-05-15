@@ -95,11 +95,11 @@ const Header = () => {
               <Image
                 src='/images/banner/logo.png'
                 alt='Logo'
-                width={48}
-                height={48}
-                className='w-12 h-12 object-contain'
+                width={150}
+                height={60}
+                className='w-25 h-17 object-contain'
               />
-              <span className='text-base font-semibold'>Kashaf Fabrics</span>
+              {/* <span className='text-base font-semibold'>Kashaf Fabrics</span> */}
             </Link>
 
             {/* Right: Cart and Dropdown */}

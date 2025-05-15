@@ -100,21 +100,21 @@
   }
 }
 
-/* Responsive Spacing */
+/* Global Container Without Padding */
 @layer utilities {
   .container {
-    @apply mx-auto px-4;
+    @apply mx-auto px-0;
   }
 
   @media (min-width: 768px) {
     .container {
-      @apply px-6;
+      @apply px-0;
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      @apply px-8;
+      @apply px-0;
     }
   }
 }
@@ -143,33 +143,43 @@
 /* CSS for sliding animation */
 @keyframes slide-left {
   0% {
-    transform: translateX(100%); /* Start from right */
+    transform: translateX(100%);
   }
   100% {
-    transform: translateX(-100%); /* Move to left */
+    transform: translateX(-100%);
   }
 }
 
 /* Top Sales Bar */
 .sales-bar-top {
-  background-color: #ff4d4d; /* Example background color */
+  background-color: #ff4d4d;
   color: white;
   font-weight: bold;
   text-align: center;
   padding: 10px 0;
   font-size: 16px;
   animation: slide-left 12s linear infinite;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Optional shadow */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 /* Bottom Sales Bar */
 .sales-bar-bottom {
-  background-color: #28a745; /* Example background color */
+  background-color: #28a745;
   color: white;
   font-weight: bold;
   text-align: center;
   padding: 10px 0;
   font-size: 16px;
-  animation: slide-left 12s linear infinite reverse; /* Reverse the direction for bottom bar */
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); /* Optional shadow */
+  animation: slide-left 12s linear infinite reverse;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+}
+@layer base {
+  html, body {
+    @apply m-0 p-0 w-full;
+  }
+}
+@layer base {
+  html, body {
+    @apply m-0 p-0 w-full overflow-x-hidden;
+  }
 }

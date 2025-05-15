@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,30 +26,49 @@ const ProductItem = ({ product, className = '' }: ProductItemProps) => {
     imagePath.startsWith('http') || imagePath.startsWith('www');
 
   return (
-    <div className={`relative group w-full aspect-[2.5/3] overflow-hidden rounded-xl border shadow-sm hover:shadow-xl transition-all ${className}`}>
-      <Link href={`/product/${product.slug}`} className="block w-full h-full relative">
-        <Image
-          src={isExternalImage(product.image) ? product.image : `/images/banner/pics/${product.image}`}
-          alt={product.name}
-          placeholder="blur"
-          blurDataURL={isExternalImage(product.image) ? product.image : `/images/banner/pics/${product.image}`}
-          width={500}
-          height={500}
-          className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
-        />
-
-        {/* Price Tag always visible */}
-        <div className="absolute top-2 left-2 bg-white text-gray-800 text-sm px-3 py-1 rounded-full font-semibold shadow-md">
-          {price > 0 ? `${currency} ${price.toFixed(2)}` : 'Price Unavailable'}
+    <div
+      className={`w-full max-w-[280px] bg-white dark:bg-gray-900 flex flex-col transition-transform duration-300 sm:scale-100 scale-[0.96] ${className}`}
+      style={{ height: '370px' }}
+    >
+      <Link href={`/product/${product.slug}`} className="block h-full">
+        {/* Image Section */}
+        <div className="w-full relative" style={{ height: '240px' }}>
+          <Image
+            src={
+              isExternalImage(product.image)
+                ? product.image
+                : `/images/banner/pics/${product.image}`
+            }
+            alt={product.name}
+            fill
+            className="object-cover w-full h-full" // Removed rounded-t-md
+          />
         </div>
 
-        {/* Info Overlay - Always visible on small screens, visible on hover for large screens */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-100 group-hover:opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-          <h3 className="text-white text-sm sm:text-base md:text-lg font-semibold line-clamp-1">{product.name}</h3>
-          <p className="text-white text-xs sm:text-sm md:text-base opacity-70 truncate">{product.brand}</p>
-          <div className="mt-1">
-            <Rating value={product.rating} caption="" isCard />
+        {/* Details Section */}
+        <div className="p-3 rounded-b-md bg-white/80 dark:bg-gray-800/70 backdrop-blur-md shadow-sm space-y-1 h-[130px] flex flex-col justify-between">
+          <div className="space-y-0.5">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 leading-snug">
+              {product.name}
+            </h3>
+            {/* <p className="text-xs text-gray-600 dark:text-gray-300 truncate">
+              {product.brand}
+            </p> */}
           </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-bold text-black dark:text-white">
+              {currency} {price.toFixed(2)}
+            </span>
+            <span className="text-xs line-through text-gray-400">
+              {currency} {(price * 1.6).toFixed(2)}
+            </span>
+            <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full font-semibold">
+              -40%
+            </span>
+          </div>
+
+          <Rating value={product.rating} caption="" isCard />
         </div>
       </Link>
     </div>

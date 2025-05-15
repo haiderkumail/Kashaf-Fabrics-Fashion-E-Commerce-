@@ -137,20 +137,22 @@ const Form = () => {
       <div className='my-4 grid md:grid-cols-4 md:gap-5'>
         <div className='overflow-x-auto md:col-span-3'>
           <div className='card bg-base-300'>
-            <div className='card-body'>
-              <h2 className='card-title'>Shipping Address</h2>
-              <p>{shippingAddress.fullName}</p>
-              <p>
-                {shippingAddress.address}, {shippingAddress.city},{' '}
-                {shippingAddress.postalCode}, {shippingAddress.country}{' '}
-              </p>
-              <div>
-                <Link className='btn' href='/shipping'>
-                  Edit
-                </Link>
-              </div>
-            </div>
-          </div>
+  <div className='card-body'>
+    <h2 className='card-title'>Shipping Address</h2>
+    <p>{shippingAddress.fullName}</p>
+    <p>
+      {shippingAddress.address}, {shippingAddress.city},{' '}
+      {shippingAddress.postalCode}, {shippingAddress.country}
+    </p>
+    <p>Phone: {shippingAddress.phoneNumber}</p>
+    <div>
+      <Link className='btn' href='/shipping'>
+        Edit
+      </Link>
+    </div>
+  </div>
+</div>
+
 
           <div className='card mt-4 bg-base-300'>
             <div className='card-body'>

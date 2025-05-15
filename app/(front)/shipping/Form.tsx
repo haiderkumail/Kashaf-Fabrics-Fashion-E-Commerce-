@@ -24,6 +24,7 @@ const Form = () => {
       city: '',
       postalCode: '',
       country: '',
+      phoneNumber: '', // ✅ Added default
     },
   });
 
@@ -33,6 +34,7 @@ const Form = () => {
     setValue('city', shippingAddress.city);
     setValue('postalCode', shippingAddress.postalCode);
     setValue('country', shippingAddress.country);
+    setValue('phoneNumber', shippingAddress.phoneNumber); // ✅ Set phone value
   }, [setValue, shippingAddress]);
 
   const formSubmit: SubmitHandler<ShippingAddress> = async (form) => {
@@ -82,6 +84,15 @@ const Form = () => {
             <FormInput name='City' id='city' required />
             <FormInput name='Postal Code' id='postalCode' required />
             <FormInput name='Country' id='country' required />
+            <FormInput
+              name='Phone Number'
+              id='phoneNumber'
+              required
+              pattern={{
+                value: /^[0-9]{10,15}$/,
+                message: 'Enter a valid phone number',
+              }}
+            />
             <div className='my-2'>
               <button
                 type='submit'

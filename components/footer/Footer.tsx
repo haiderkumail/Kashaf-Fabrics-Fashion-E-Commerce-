@@ -31,18 +31,24 @@ const Footer = () => {
             <li><Link href="/footer/contact-us" className="hover:underline">Contact Us</Link></li>
             <li><Link href="/footer/FAQs" className="hover:underline">FAQs</Link></li>
             <li><Link href="/footer/shipping-info" className="hover:underline">Shipping Info</Link></li>
-            {/* <li><Link href="/track-order" className="hover:underline">Track Order</Link></li> */}
           </ul>
         </div>
 
-        {/* Social Media */}
+        {/* Contact Info */}
         <div>
-          <h3 className="font-semibold mb-2">Follow Us</h3>
-          <div className="flex space-x-4">
-            <a href="#" aria-label="Facebook" className="hover:text-primary">Facebook</a>
-            <a href="#" aria-label="Instagram" className="hover:text-primary">Instagram</a>
-            <a href="#" aria-label="Twitter" className="hover:text-primary">Twitter</a>
-          </div>
+          <h3 className="font-semibold mb-2">Contact Information</h3>
+          <ul className="space-y-2 text-sm">
+            <li><span className="font-medium">Email:</span> info@kashaffabrics.com</li>
+            <li><span className="font-medium">Phone:</span> +92 300 1234567</li>
+            <li>
+              <span className="font-medium">Branch 1:</span><br />
+              123 Main Bazaar, Faisalabad, Pakistan
+            </li>
+            <li>
+              <span className="font-medium">Branch 2:</span><br />
+              456 Commercial Area, Lahore, Pakistan
+            </li>
+          </ul>
         </div>
       </div>
 
