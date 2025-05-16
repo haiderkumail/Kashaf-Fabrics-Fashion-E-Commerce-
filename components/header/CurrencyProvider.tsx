@@ -1,43 +1,18 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 
-// Define available currencies
-type Currency = 'PKR' | 'USD' | 'GBP';
+const CurrencyContext = createContext({
+  currency: 'PKR',
+  convertPrice: (price: number) => price, // no conversion
+});
 
-interface CurrencyContextType {
-  currency: Currency;
-  setCurrency: (currency: Currency) => void;
-  convertPrice: (price: number) => number;
-}
-
-// Create the context
-const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
-
-// Conversion rates (example rates, you can make dynamic later)
-const conversionRates: Record<Currency, number> = {
-  USD: 1,
-  PKR: 280,
-  GBP: 0.75,
-};
-
-export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
-  const [currency, setCurrency] = useState<Currency>('USD');
-
-  const convertPrice = (price: number) => {
-    return price * conversionRates[currency];
-  };
-
+export const CurrencyProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency, convertPrice }}>
+    <CurrencyContext.Provider value={{ currency: 'PKR', convertPrice: (price) => price }}>
       {children}
     </CurrencyContext.Provider>
   );
 };
 
-// Hook to use context
-export const useCurrency = () => {
-  const context = useContext(CurrencyContext);
-  if (!context) throw new Error('useCurrency must be used within a CurrencyProvider');
-  return context;
-};
+export const useCurrency = () => useContext(CurrencyContext);

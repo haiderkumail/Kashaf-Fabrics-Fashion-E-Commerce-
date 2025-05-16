@@ -9,11 +9,9 @@ const LatestProductsSlider = async () => {
 
   return (
     <div className="w-full px-0 my-2 sm:my-4">
-<h2 className="text-3xl sm:text-4xl font-bold mb-4 px-4 text-center" style={{ fontFamily: 'cursive' }}>
-  New Arrivals
-</h2>
-
-
+      <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-6">
+        New Arrivals
+      </h2>
       <CardSlider>
         {latest.map((product) => (
           <CarouselItem

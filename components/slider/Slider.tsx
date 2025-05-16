@@ -9,7 +9,7 @@ type SliderProps = {
 const Slider = ({ products }: SliderProps) => {
   return (
     <div>
-      <h2 className="my-4 text-3xl font-extrabold text-center tracking-wide font-[cursive]">
+      <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-6">
   Related Products
 </h2>
 

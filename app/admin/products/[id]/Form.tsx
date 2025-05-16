@@ -44,6 +44,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     defaultValues: {
       colors: [],
       sizes: [],
+      discount: 0,
     },
   });
 
@@ -60,6 +61,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     setValue('brand', product.brand);
     setValue('countInStock', product.countInStock);
     setValue('description', product.description);
+    setValue('discount', product.discount || 0);
     setColors(product.colors || []);
     setSizesText((product.sizes || []).join(', '));
   }, [product, setValue]);
@@ -175,6 +177,9 @@ export default function ProductEditForm({ productId }: { productId: string }) {
         <FormInput name='Brand' id='brand' required />
         <FormInput name='Description' id='description' required />
         <FormInput name='Count In Stock' id='countInStock' required />
+
+        {/* NEW DISCOUNT FIELD */}
+        <FormInput name='Discount (%)' id='discount' required={false} />
 
         <div className='mb-6 md:flex'>
           <label className='label md:w-1/5'>Colors</label>

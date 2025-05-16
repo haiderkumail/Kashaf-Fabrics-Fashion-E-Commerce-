@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+
 import OrderDetails from './OrderDetails';
 
 type Props = {
@@ -7,14 +8,13 @@ type Props = {
   };
 };
 
-// Properly typed metadata generator for dynamic routes
+// Metadata generator for dynamic routes
 export const generateMetadata = ({ params }: Props): Metadata => {
   return {
     title: `Order ${params.id}`,
   };
 };
 
-// Page Component with correct typing
 const OrderDetailsPage = ({ params }: Props) => {
   return (
     <OrderDetails

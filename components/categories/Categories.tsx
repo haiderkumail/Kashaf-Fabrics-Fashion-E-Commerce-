@@ -121,7 +121,7 @@ export default async function Categories() {
 
 return (
   <div className="container mx-auto px-4">
-    <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6" style={{ fontFamily: 'cursive' }}>
+    <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-6">
       Best Products for Your Wardrobe
     </h2>
 

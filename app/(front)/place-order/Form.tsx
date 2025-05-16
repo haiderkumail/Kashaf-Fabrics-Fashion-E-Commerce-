@@ -51,26 +51,26 @@ const Form = () => {
           totalPrice,
         }),
       });
-  
+
       const data = await res.json();
-  
+
       if (res.ok) {
         setOrderId(data.order._id);
         toast.success('Order placed successfully');
-  
-        // ✅ If payment method is not Stripe, finalize here
+
+        // If payment method is not Stripe, finalize here
         if (paymentMethod !== 'Stripe') {
           clear(); // Clear the cart
           return router.push(`/order/${data.order._id}`); // Redirect to order page
         }
-  
-        // ❗ Don't redirect or clear here for Stripe yet (wait for successful payment)
+
+        // Don't redirect or clear here for Stripe yet (wait for successful payment)
       } else {
         toast.error(data.message);
       }
     },
   );
-  
+
   const { trigger: updatePaymentStatus, isMutating: isUpdatingPayment } = useSWRMutation(
     `/api/orders/${orderId}/payment`,
     async () => {
@@ -137,22 +137,22 @@ const Form = () => {
       <div className='my-4 grid md:grid-cols-4 md:gap-5'>
         <div className='overflow-x-auto md:col-span-3'>
           <div className='card bg-base-300'>
-  <div className='card-body'>
-    <h2 className='card-title'>Shipping Address</h2>
-    <p>{shippingAddress.fullName}</p>
-    <p>
-      {shippingAddress.address}, {shippingAddress.city},{' '}
-      {shippingAddress.postalCode}, {shippingAddress.country}
-    </p>
-    <p>Phone: {shippingAddress.phoneNumber}</p>
-    <div>
-      <Link className='btn' href='/shipping'>
-        Edit
-      </Link>
-    </div>
-  </div>
-</div>
-
+            <div className='card-body'>
+              <h2 className='card-title'>Shipping Address</h2>
+              <p>{shippingAddress.fullName}</p>
+              <p>
+                {shippingAddress.address}, {shippingAddress.city},{' '}
+                {shippingAddress.postalCode}, {shippingAddress.country}
+              </p>
+              <p>Phone: {shippingAddress.phoneNumber}</p>
+              <p>Email: {shippingAddress.email}</p> {/* Added email display */}
+              <div>
+                <Link className='btn' href='/shipping'>
+                  Edit
+                </Link>
+              </div>
+            </div>
+          </div>
 
           <div className='card mt-4 bg-base-300'>
             <div className='card-body'>
@@ -190,7 +190,7 @@ const Form = () => {
                             alt={item.name}
                             width={50}
                             height={50}
-                          ></Image>
+                          />
                           <span className='px-2'>
                             {item.name}({item.color} {item.size})
                           </span>

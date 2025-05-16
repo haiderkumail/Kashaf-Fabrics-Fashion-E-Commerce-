@@ -16,9 +16,10 @@ export interface Product {
   featuredImage?: string;
   createdAt?: string;
   updatedAt?: string;
-  colors?: { name: string; imageUrl: string }[];  // Update colors to be an array of objects with 'name' and 'imageUrl'
+  colors?: { name: string; imageUrl: string }[];  // Colors with name and imageUrl
   sizes?: string[];
   averageRating: number; // average from all users
+  discount: number;
 }
 
 const ProductSchema = new mongoose.Schema(
@@ -32,15 +33,15 @@ const ProductSchema = new mongoose.Schema(
     countInStock: Number,
     description: String,
     averageRating: Number,
-    numReviewa: Number,
+    numReviews: Number, // ✅ Fixed typo here
+    discount: Number,
     colors: [
       {
         name: { type: String, required: true },
         imageUrl: { type: String, required: true },
-      }
+      },
     ],
-    
-    sizes: [{ type: String }], // Array of strings for sizes
+    sizes: [{ type: String }],
   },
   {
     timestamps: true,

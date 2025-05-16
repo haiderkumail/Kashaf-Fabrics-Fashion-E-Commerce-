@@ -78,7 +78,7 @@ const Menu = () => {
                   </li>
                 )}
                 <li onClick={handleClick}>
-                  <Link href='/order-history'>Order History</Link>
+                  {/* <Link href='/order-history'>Order History</Link> */}
                 </li>
                 <li onClick={handleClick}>
                   <Link href='/profile'>Profile</Link>
@@ -106,63 +106,63 @@ const Menu = () => {
 
       {/* --- MOBILE MENU SECTION --- */}
       <div className='md:hidden space-y-2'>
-        {/* Theme Toggle */}
-        <div className='flex items-center gap-3'>
-          <label className='swap swap-rotate'>
-            <input
-              type='checkbox'
-              checked={theme === 'light'}
-              onChange={toggleTheme}
-            />
-            <Sun className='swap-on w-5 h-5' />
-            <Moon className='swap-off w-5 h-5' />
-          </label>
-        </div>
+  {/* Theme Toggle */}
+  <div className='flex items-center gap-3'>
+    <label className='swap swap-rotate'>
+      <input
+        type='checkbox'
+        checked={theme === 'light'}
+        onChange={toggleTheme}
+      />
+      <Sun className='swap-on w-5 h-5' />
+      <Moon className='swap-off w-5 h-5' />
+    </label>
+  </div>
 
-        {/* Auth Section */}
-        <div className='space-y-1'>
-          {session && session.user ? (
-            <div className='space-y-1'>
-              {session.user.isAdmin && (
-                <Link
-                  href='/admin/dashboard'
-                  onClick={handleClick}
-                  className='block w-full text-left btn btn-sm btn-ghost'
-                >
-                  Admin Dashboard
-                </Link>
-              )}
-              <Link
-                href='/order-history'
-                onClick={handleClick}
-                className='block w-full text-left btn btn-sm btn-ghost'
-              >
-                Order History
-              </Link>
-              <Link
-                href='/profile'
-                onClick={handleClick}
-                className='block w-full text-left btn btn-sm btn-ghost'
-              >
-                Profile
-              </Link>
-              <button
-                onClick={signOutHandler}
-                className='block w-full text-left btn btn-sm btn-ghost'
-              >
-                Sign Out
-              </button>
-            </div>
-          ) : (
-            <button
-              className='block w-full text-left btn btn-sm btn-ghost'
-              onClick={() => signIn()}
-            >
-              Sign In
-            </button>
-          )}
-        </div>
+  {/* Auth Section */}
+  <div className='space-y-1'>
+    {session && session.user ? (
+      <div className='space-y-1'>
+        {session.user.isAdmin && (
+          <Link
+            href='/admin/dashboard'
+            onClick={handleClick}
+            className='block w-full text-left btn btn-sm btn-ghost'
+          >
+            Admin Dashboard
+          </Link>
+        )}
+        {/* <Link
+          href='/order-history'
+          onClick={handleClick}
+          className='block w-full text-left btn btn-sm btn-ghost'
+        >
+          Order History
+        </Link> */}
+        <Link
+          href='/profile'
+          onClick={handleClick}
+          className='block w-full text-left btn btn-sm btn-ghost'
+        >
+          Profile
+        </Link>
+        <button
+          onClick={signOutHandler}
+          className='block w-full text-left btn btn-sm btn-ghost'
+        >
+          Sign Out
+        </button>
       </div>
+    ) : (
+      <button
+        className='block w-full text-left btn btn-sm btn-ghost'
+        onClick={() => signIn()}
+      >
+        Sign In
+      </button>
+    )}
+  </div>
+</div>
 
     </>
   );

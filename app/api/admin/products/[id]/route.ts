@@ -21,7 +21,7 @@ export const GET = auth(async (...args: any) => {
 
 export const PUT = auth(async (...args: any) => {
   const [req, context] = args;
-  const { id } = await context.params; // Await params for dynamic id
+  const { id } = await context.params;
 
   if (!req.auth || !req.auth.user?.isAdmin) {
     return Response.json({ message: 'unauthorized' }, { status: 401 });
@@ -38,6 +38,7 @@ export const PUT = auth(async (...args: any) => {
     description,
     colors,
     sizes,
+    discount,  // <-- added here
   } = await req.json();
 
   try {
@@ -55,8 +56,10 @@ export const PUT = auth(async (...args: any) => {
     product.brand = brand;
     product.countInStock = countInStock;
     product.description = description;
-    product.colors = Array.isArray(colors) ? colors : [];  // Ensure it’s an array
+    product.colors = Array.isArray(colors) ? colors : [];
     product.sizes = Array.isArray(sizes) ? sizes : [];
+
+    product.discount = discount !== undefined ? discount : product.discount;// <-- added here
 
     const updatedProduct = await product.save();
     return Response.json(updatedProduct);
@@ -64,6 +67,7 @@ export const PUT = auth(async (...args: any) => {
     return Response.json({ message: err.message }, { status: 500 });
   }
 });
+
 
 export const DELETE = auth(async (...args: any) => {
   const [req, context] = args;

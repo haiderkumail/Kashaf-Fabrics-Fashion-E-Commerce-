@@ -12,6 +12,7 @@ const serializeProduct = (product: any): Product => ({
   updatedAt: product.updatedAt?.toString(),
   colors: Array.isArray(product.colors) ? product.colors : [],  // Ensure colors is an array
   sizes: Array.isArray(product.sizes) ? product.sizes : [],      // Ensure sizes is an array
+  discount: typeof product.discount === 'number' ? product.discount : 0, 
 });
 
 const getLatest = cache(async () => {

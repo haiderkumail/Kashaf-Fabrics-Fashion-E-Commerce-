@@ -4,7 +4,9 @@ import {
   AlignJustify,
   Search,
   ShoppingCart,
-  MoreVertical
+  MoreVertical,
+  Sun,
+  Moon
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,8 +21,9 @@ import { SearchBox } from './SearchBox';
 type Currency = 'USD' | 'PKR' | 'GBP';
 
 const Header = () => {
-  const { setCurrency } = useCurrency();
-  const { items } = useCartService(); // ✅ Cart items
+  const { currency } = useCurrency();
+
+  const { items } = useCartService();
   const [isDark, setIsDark] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
 
@@ -33,10 +36,6 @@ const Header = () => {
     const newTheme = isDark ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     setIsDark(!isDark);
-  };
-
-  const handleCurrencyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrency(event.target.value as Currency);
   };
 
   const toggleSearchBox = () => {
@@ -59,15 +58,16 @@ const Header = () => {
               <Image
                 src='/images/banner/logo.png'
                 alt='Logo'
-                width={90}
-                height={90}
-                className='w-16 h-16 object-contain sm:w-[90px] sm:h-[90px]'
+                width={110}
+                height={110}
+                className='w-16 h-16 object-contain sm:w-[110px] sm:h-[110px]'
               />
               <span className='text-base font-semibold'>Kashaf Fabrics</span>
             </Link>
           </div>
 
-          <div className='flex items-center'>
+          {/* Currency selector removed */}
+          {/* <div className='flex items-center'>
             <select
               onChange={handleCurrencyChange}
               defaultValue='USD'
@@ -77,20 +77,20 @@ const Header = () => {
               <option value='PKR'>PKR</option>
               <option value='GBP'>GBP</option>
             </select>
-          </div>
+          </div> */}
 
           <Menu />
         </div>
 
-        {/* --- MOBILE HEADER --- */}
+        {/* MOBILE HEADER */}
         <div className='md:hidden bg-base-300 px-4 py-2 shadow-sm'>
           <div className='flex items-center justify-between'>
-            {/* Left: Drawer Icon */}
+            {/* Hamburger menu */}
             <label htmlFor='my-drawer' className='btn btn-square btn-ghost p-1'>
               <AlignJustify className='w-5 h-5' />
             </label>
 
-            {/* Center: Logo */}
+            {/* Logo */}
             <Link href='/' className='flex items-center gap-2'>
               <Image
                 src='/images/banner/logo.png'
@@ -99,12 +99,12 @@ const Header = () => {
                 height={60}
                 className='w-25 h-17 object-contain'
               />
-              {/* <span className='text-base font-semibold'>Kashaf Fabrics</span> */}
             </Link>
 
-            {/* Right: Cart and Dropdown */}
+            {/* Right side: Cart + Theme toggle + dropdown */}
             <div className='flex items-center gap-2'>
-              {/* Cart Icon */}
+
+              {/* Cart icon */}
               <Link href='/cart' className='relative' aria-label='Shopping Cart'>
                 <ShoppingCart className='w-5 h-5' />
                 {items.length !== 0 && (
@@ -116,7 +116,18 @@ const Header = () => {
                 )}
               </Link>
 
-              {/* Dropdown Menu */}
+              {/* Theme toggler
+              <label className='swap swap-rotate'>
+                <input
+                  type='checkbox'
+                  checked={!isDark} // Use !isDark to reflect the light theme
+                  onChange={toggleTheme}
+                />
+                <Sun className='swap-on w-5 h-5' />
+                <Moon className='swap-off w-5 h-5' />
+              </label> */}
+
+              {/* Dropdown menu */}
               <div className='dropdown dropdown-end'>
                 <div tabIndex={0} role='button' className='btn btn-ghost btn-square p-1'>
                   <MoreVertical className='w-5 h-5' />
@@ -130,30 +141,23 @@ const Header = () => {
                       <Search className='w-4 h-4 mr-2' /> Search
                     </button>
                   </li>
-                  <li>
-                    <select
-                      onChange={handleCurrencyChange}
-                      defaultValue='USD'
-                      className='select select-bordered select-sm w-full'
-                    >
-                      <option value='USD'>USD</option>
-                      <option value='PKR'>PKR</option>
-                      <option value='GBP'>GBP</option>
-                    </select>
-                  </li>
+
+                  {/* Menu component here keeps Sign In / Profile / Sign Out etc inside dropdown */}
                   <li><Menu /></li>
                 </ul>
               </div>
             </div>
+
           </div>
 
-          {/* Search Box Below Dropdown */}
+          {/* Search box */}
           {searchVisible && (
             <div className='mt-2 px-1'>
               <SearchBox />
             </div>
           )}
         </div>
+
       </nav>
     </header>
   );

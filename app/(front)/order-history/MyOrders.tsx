@@ -1,21 +1,25 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 import useSWR from 'swr';
 
-import { useCurrency } from '@/components/header/CurrencyProvider'; // Global currency context
+import { useCurrency } from '@/components/header/CurrencyProvider'; 
 import { Order } from '@/lib/models/OrderModel';
 
+const fetcher = (url: string) => fetch(url).then(res => res.json());
+
 const MyOrders = () => {
-  const router = useRouter();
-  const { data: orders, error, isLoading } = useSWR('/api/orders/mine');
-  const { currency, convertPrice } = useCurrency(); // Use shared context
+  const { data: orders, error } = useSWR<Order[]>('/api/orders/mine', fetcher);
+  const { currency, convertPrice } = useCurrency();
+
+  const isLoading = !orders && !error;
 
   if (error) return <>An error has occurred</>;
   if (isLoading) return <>Loading...</>;
-  if (!orders) return <>No orders...</>;
+  if (!orders || orders.length === 0) return <>No orders...</>;
+
+  console.log('Orders:', orders);
 
   return (
     <div className='overflow-x-auto'>
@@ -34,16 +38,12 @@ const MyOrders = () => {
           {orders.map((order: Order) => (
             <tr key={order._id}>
               <td>{order._id.substring(20, 24)}</td>
-              <td className='whitespace-nowrap'>
-                {order.createdAt.substring(0, 10)}
-              </td>
+              <td className='whitespace-nowrap'>{order.createdAt.substring(0, 10)}</td>
               <td>
                 {currency} {convertPrice(order.totalPrice).toFixed(2)}
               </td>
               <td>
-                {order.isPaid && order.paidAt
-                  ? order.paidAt.substring(0, 10)
-                  : 'not paid'}
+                {order.isPaid && order.paidAt ? order.paidAt.substring(0, 10) : 'not paid'}
               </td>
               <td>
                 {order.isDelivered && order.deliveredAt

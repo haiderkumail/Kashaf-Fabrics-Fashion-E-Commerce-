@@ -24,7 +24,8 @@ const Form = () => {
       city: '',
       postalCode: '',
       country: '',
-      phoneNumber: '', // ✅ Added default
+      phoneNumber: '', // existing
+      email: '',      // ✅ added email default
     },
   });
 
@@ -34,7 +35,8 @@ const Form = () => {
     setValue('city', shippingAddress.city);
     setValue('postalCode', shippingAddress.postalCode);
     setValue('country', shippingAddress.country);
-    setValue('phoneNumber', shippingAddress.phoneNumber); // ✅ Set phone value
+    setValue('phoneNumber', shippingAddress.phoneNumber);
+    setValue('email', shippingAddress.email || '');  // ✅ set email value
   }, [setValue, shippingAddress]);
 
   const formSubmit: SubmitHandler<ShippingAddress> = async (form) => {
@@ -47,18 +49,20 @@ const Form = () => {
     name,
     required,
     pattern,
+    type = 'text',  // ✅ added type prop with default text
   }: {
     id: keyof ShippingAddress;
     name: string;
     required?: boolean;
     pattern?: ValidationRule<RegExp>;
+    type?: string;
   }) => (
     <div className='mb-2'>
       <label className='label' htmlFor={id}>
         {name}
       </label>
       <input
-        type='text'
+        type={type}
         id={id}
         {...register(id, {
           required: required && `${name} is required`,
@@ -91,6 +95,16 @@ const Form = () => {
               pattern={{
                 value: /^[0-9]{10,15}$/,
                 message: 'Enter a valid phone number',
+              }}
+            />
+            <FormInput
+              name='Email'
+              id='email'
+              type='email'            // email input type
+              required
+              pattern={{
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Enter a valid email address',
               }}
             />
             <div className='my-2'>

@@ -38,6 +38,7 @@ export const POST = auth(async (req: any) => {
     description: 'sample description',
     rating: 0,
     numReviews: 0,
+    discount: 0,
   });
   try {
     await product.save();
