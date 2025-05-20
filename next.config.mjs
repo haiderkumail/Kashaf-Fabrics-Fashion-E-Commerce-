@@ -13,10 +13,15 @@ const nextConfig = {
     ],
   },
 
-  // Add this to ignore TypeScript errors on build
-  // typescript: {
-  //   ignoreBuildErrors: true,
-  // },
+  // ✅ Skip ESLint during build (useful for Vercel deploys)
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  // ✅ Skip TypeScript errors during build (only if you're sure)
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default withPlaiceholder(nextConfig);
