@@ -46,7 +46,7 @@ export async function generateMetadata({
     page: string;
   };
 }) {
-  const { q = 'all', category = 'all', price = 'all', rating = 'all' } = await searchParams;
+  const { q = 'all', category = 'all', price = 'all', rating = 'all' } = searchParams;
 
   if (
     (q !== 'all' && q !== '') ||
@@ -79,7 +79,14 @@ export default async function SearchPage({
     page: string;
   };
 }) {
-  const { q = 'all', category = 'all', price = 'all', rating = 'all', sort = 'newest', page = '1' } = await searchParams;
+  const {
+    q = 'all',
+    category = 'all',
+    price = 'all',
+    rating = 'all',
+    sort = 'newest',
+    page = '1',
+  } = searchParams;
 
   const getFilterUrl = ({
     c,
@@ -111,7 +118,7 @@ export default async function SearchPage({
     rating,
     page,
     sort,
-    limit: 4, // ✅ Limit to 8 products per page regardless of screen size
+    limit: 4,
   });
 
   if (!products) {
@@ -271,9 +278,9 @@ export default async function SearchPage({
               {price !== 'all' && ' : Price ' + price}
               {rating !== 'all' && ' : Rating ' + rating + ' & up'}
               {(q !== 'all' && q !== '') ||
-                category !== 'all' ||
-                rating !== 'all' ||
-                price !== 'all' ? (
+              category !== 'all' ||
+              rating !== 'all' ||
+              price !== 'all' ? (
                 <Link className="btn btn-ghost btn-sm" href="/search">
                   Clear
                 </Link>
@@ -302,12 +309,10 @@ export default async function SearchPage({
                       <ProductItem product={sanitizeProduct(product)} />
                     </div>
                   </div>
-
                 ))}
               </div>
             </div>
 
-            {/* Pagination */}
             <div className="join mt-5 flex flex-wrap justify-center">
               {products.length > 0 &&
                 Array.from(Array(pages).keys()).map((p) => (
@@ -320,10 +325,7 @@ export default async function SearchPage({
                   </Link>
                 ))}
             </div>
-
           </div>
-
-
         </div>
       </div>
     </div>
