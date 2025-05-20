@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import OrderDetails from './OrderDetails';
 
-// ✅ Inline typing for metadata
+// ✅ DO NOT use Props or PageProps here — use inline typing
 export async function generateMetadata(
   { params }: { params: { id: string } }
 ): Promise<Metadata> {
@@ -10,7 +10,7 @@ export async function generateMetadata(
   };
 }
 
-// ✅ Props type for the page
+// ✅ Props only used here — totally fine
 type PageProps = {
   params: {
     id: string;
@@ -18,7 +18,5 @@ type PageProps = {
 };
 
 export default function OrderDetailsPage({ params }: PageProps) {
-  return (
-    <OrderDetails orderId={params.id} />
-  );
+  return <OrderDetails orderId={params.id} />;
 }
