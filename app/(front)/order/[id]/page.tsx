@@ -24,3 +24,6 @@
 
 //   return <OrderDetails orderId={id} />;
 // }
+export default function Page() {
+  return null;
+}
