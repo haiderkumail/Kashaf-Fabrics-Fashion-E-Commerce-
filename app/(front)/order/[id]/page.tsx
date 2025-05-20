@@ -8,8 +8,10 @@ type Props = {
   };
 };
 
-// Metadata generator for dynamic routes
-export const generateMetadata = ({ params }: Props): Metadata => {
+// Fix: async and correctly typed props
+export const generateMetadata = async (
+  { params }: Props
+): Promise<Metadata> => {
   return {
     title: `Order ${params.id}`,
   };
