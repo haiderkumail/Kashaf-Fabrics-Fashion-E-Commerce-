@@ -1,28 +1,30 @@
 import { Metadata } from 'next';
+
 import OrderDetails from './OrderDetails';
 
-// DO NOT export this type — keep it local if you want
-type PageProps = {
+type Props = {
   params: {
     id: string;
   };
 };
 
-// ✅ Correct inline type for generateMetadata (do NOT use `PageProps` here)
-export async function generateMetadata(
-  { params }: { params: { id: string } }
-): Promise<Metadata> {
+// Metadata generator for dynamic routes
+export const generateMetadata = ({
+  params,
+}: {
+  params: { id: string };
+}): Metadata => {
   return {
     title: `Order ${params.id}`,
   };
-}
+};
 
-// ✅ Page component using `params` (you can use your type here safely)
-export default function OrderDetailsPage({ params }: PageProps) {
+const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
   return (
     <OrderDetails
-      paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
       orderId={params.id}
     />
   );
-}
+};
+
+export default OrderDetailsPage;
