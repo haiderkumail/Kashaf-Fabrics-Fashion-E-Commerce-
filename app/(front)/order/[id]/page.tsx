@@ -1,29 +1,27 @@
 import { Metadata } from 'next';
-
 import OrderDetails from './OrderDetails';
 
-type Props = {
+type PageProps = {
   params: {
     id: string;
   };
 };
 
-// Fix: async and correctly typed props
-export const generateMetadata = async (
-  { params }: Props
-): Promise<Metadata> => {
+// ✅ Use inline type in generateMetadata to avoid inference issues
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+): Promise<Metadata> {
   return {
     title: `Order ${params.id}`,
   };
-};
+}
 
-const OrderDetailsPage = ({ params }: Props) => {
+// ✅ You can still use the type for the page component
+export default function OrderDetailsPage({ params }: PageProps) {
   return (
     <OrderDetails
       paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'}
       orderId={params.id}
     />
   );
-};
-
-export default OrderDetailsPage;
+}
