@@ -117,15 +117,22 @@ export default async function Categories() {
   }
 
   // ✅ Hard-limit to first 8 products
-  const visibleProducts = products.slice(0, 8);
+  const visibleProducts = products.slice(0, 10);
 
 return (
   <div className="container mx-auto px-4">
-    <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-6">
-      Best Products for Your Wardrobe
-    </h2>
+<h2
+  className="text-2xl sm:text-3xl font-medium text-center mb-6 uppercase"
+  style={{ fontFamily: "'Montserrat', sans-serif" }}
+>
+  Best Products for Your Wardrobe
+</h2>
 
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+
+
+
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+
       {visibleProducts.map((product) => (
         <div key={product.slug} className="flex justify-center">
           <div className="w-[150%] sm:w-full">

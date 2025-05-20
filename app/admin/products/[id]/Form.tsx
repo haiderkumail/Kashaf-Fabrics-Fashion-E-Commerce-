@@ -159,7 +159,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
         <FormInput name='Name' id='name' required />
         <FormInput name='Slug' id='slug' required />
         <FormInput name='Image' id='image' required />
-        <div className='mb-6 md:flex'>
+        {/* <div className='mb-6 md:flex'>
           <label className='label md:w-1/5' htmlFor='imageFile'>
             Upload Image
           </label>
@@ -171,7 +171,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
               onChange={uploadHandler}
             />
           </div>
-        </div>
+        </div> */}
         <FormInput name='Price' id='price' required />
         <FormInput name='Category' id='category' required />
         <FormInput name='Brand' id='brand' required />

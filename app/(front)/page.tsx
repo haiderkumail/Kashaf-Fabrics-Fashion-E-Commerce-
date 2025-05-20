@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 
 import Carousel, { CarouselSkeleton } from '@/components/carousel/carousel';
 import Carousel2, { CarouselSkeleton2 } from '@/components/carousel/carousel2';
+import Carousel3 from '@/components/carousel/Carousel3';
 import Categories from '@/components/categories/Categories';
 import ClientOnlyPopup from '@/components/ClientOnlyPopup'; // ✅ regular import
 import SalesBar from '@/components/common/SalesBar';
@@ -35,12 +36,16 @@ const HomePage = () => {
           </Suspense>
         </div>
       </div>
-
+ 
       <div className="flex flex-col gap-4 md:gap-16 w-full px-2 sm:px-4">
         <Suspense fallback={<ProductItemsSkeleton qty={8} name="Latest Products" />}>
           <LatestProductsSlider />
         </Suspense>
-
+             <div className="w-screen -mx-[calc((100vw-100%)/2)] relative z-0 -mt-2">
+        <Suspense fallback={<CarouselSkeleton />}>
+          <Carousel3 />
+        </Suspense>
+      </div>
         <div className="-mx-[calc((100vw-100%)/2)] w-screen relative z-0">
           <Suspense fallback={<CarouselSkeleton />}>
             <SalesBar />

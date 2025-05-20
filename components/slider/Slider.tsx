@@ -9,15 +9,18 @@ type SliderProps = {
 const Slider = ({ products }: SliderProps) => {
   return (
     <div>
-      <h2 className="text-2xl sm:text-3xl font-extrabold text-center mb-6">
-  Related Products
-</h2>
+      <h2
+        className="text-2xl sm:text-3xl font-normal text-center mb-6 uppercase"
+        style={{ fontFamily: "'Montserrat', sans-serif" }}
+      >
+        Related Products
+      </h2>
 
       <CardSlider>
         {products.map((product) => (
           <CarouselItem
             key={product.slug}
-            className="basis-1/2 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+            className="basis-1/2 sm:basis-1/3 md:basis-[20%] px-1 sm:px-2"
           >
             <ProductItem product={product} />
           </CarouselItem>

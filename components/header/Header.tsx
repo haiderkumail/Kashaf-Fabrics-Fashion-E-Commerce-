@@ -51,19 +51,23 @@ const Header = () => {
             <label htmlFor='my-drawer' className='btn btn-square btn-ghost'>
               <AlignJustify />
             </label>
-            <Link
-              href='/'
-              className='ml-2 flex items-center gap-2 sm:ml-4 sm:text-lg'
-            >
-              <Image
-                src='/images/banner/logo.png'
-                alt='Logo'
-                width={110}
-                height={110}
-                className='w-16 h-16 object-contain sm:w-[110px] sm:h-[110px]'
-              />
-              <span className='text-base font-semibold'>Kashaf Fabrics</span>
-            </Link>
+<Link
+  href='/'
+  className='ml-2 flex items-center gap-4 sm:ml-6 sm:text-2xl'
+>
+  <Image
+    src='/images/banner/logo.png'
+    alt='Logo'
+    width={160}
+    height={160}
+    className='w-24 h-24 object-contain sm:w-[160px] sm:h-[160px]'
+  />
+  <span className='text-xl sm:text-3xl font-extrabold tracking-wide'>
+    Kashaf Fabrics
+  </span>
+</Link>
+
+
           </div>
 
           {/* Currency selector removed */}

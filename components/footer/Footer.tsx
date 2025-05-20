@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <footer className="bg-base-200 text-base-content py-10 mt-10 border-t">
+    <footer className="bg-gradient-to-br from-black to-yellow-500 text-white py-10 mt-10 border-t border-yellow-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Brand Info */}
         <div>
@@ -17,10 +17,10 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold mb-2">Company</h3>
           <ul className="space-y-1 text-sm">
-            <li><Link href="/footer/about-us">About Us</Link></li>
-            <li><Link href="/footer/policy-privacy">Privacy Policy</Link></li>
-            <li><Link href="/footer/refund-policy">Refund Policy</Link></li>
-            <li><Link href="/footer/return-policy">Return Policy</Link></li>
+            <li><Link href="/footer/about-us" className="hover:underline">About Us</Link></li>
+            <li><Link href="/footer/policy-privacy" className="hover:underline">Privacy Policy</Link></li>
+            <li><Link href="/footer/refund-policy" className="hover:underline">Refund Policy</Link></li>
+            <li><Link href="/footer/return-policy" className="hover:underline">Return Policy</Link></li>
           </ul>
         </div>
 
@@ -53,7 +53,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="text-center mt-8 text-sm text-gray-500">
+      <div className="text-center mt-8 text-sm text-yellow-100">
         &copy; {new Date().getFullYear()} Kashaf Fabrics. All rights reserved.
       </div>
     </footer>

@@ -15,7 +15,7 @@ const ProductItems = async () => {
     <div className="w-full">
       <h2 className="my-2 text-2xl md:my-4">Latest Products</h2>
       <div className="w-full">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 lg:gap-0.5">
+       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-3 lg:gap-0.5">
 
           {latestProducts.map((product) => (
             <ProductItem key={product.slug} product={convertDocToObj(product)} />
@@ -51,7 +51,8 @@ export const ProductItemsSkeleton = ({ qty, name }: { qty: number; name: string 
     <div>
       <h2 className="my-2 text-2xl md:my-4">{name}</h2>
       <div className="w-full">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 lg:gap-0.5">
+       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-3 lg:gap-0.5">
+
 
           {Array.from({ length: qty }).map((_, i) => {
             return <ProductItemSkeleton key={i} />;

@@ -44,12 +44,17 @@ const Form = () => {
         body: JSON.stringify({
           paymentMethod,
           shippingAddress,
-          items,
+          items: items.map((item) => ({
+            ...item,
+            image: item.image, // Include image
+            color: item.color, // Include color
+          })),
           itemsPrice,
           taxPrice,
           shippingPrice,
           totalPrice,
         }),
+
       });
 
       const data = await res.json();

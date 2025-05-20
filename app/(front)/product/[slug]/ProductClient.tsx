@@ -59,7 +59,7 @@ export default function ProductClient({ product, base64, topRated }: ProductClie
         <div>
           <ul className="space-y-4">
             <li><h1 className="text-xl">{product.name}</h1></li>
-            <li><Rating value={product.rating} caption={`${product.numReviews} ratings`} /></li>
+            {/* <li><Rating value={product.rating} caption={`${product.numReviews} ratings`} /></li> */}
             <li>{product.brand}</li>
             <li><div className="divider"></div></li>
             <li><p>Description: {product.description}</p></li>

@@ -18,17 +18,33 @@ const sendOrderEmail = async (order: any) => {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT) || 587,
-    secure: false, // true for port 465, false for others like 587
+    secure: false,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
   });
 
+  // Generate a Google Maps link for the address
+  const addressQuery = encodeURIComponent(
+    `${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}, ${order.shippingAddress.country}`
+  );
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${addressQuery}`;
+
   const itemsHtml = order.items
     .map(
-      (item: any) =>
-        `<li>${item.name} (${item.color || ''} ${item.size || ''}) - Qty: ${item.qty} - Price: ${item.price}</li>`
+      (item: any) => `
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            <img src="${item.image}" alt="${item.name}" width="60" height="60" style="object-fit: contain;" />
+          </td>
+          <td style="padding: 10px; border: 1px solid #ddd;">
+            ${item.name} (${item.color || ''} ${item.size || ''})
+          </td>
+          <td style="padding: 10px; border: 1px solid #ddd;">${item.qty}</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">${item.price}</td>
+        </tr>
+      `
     )
     .join('');
 
@@ -36,17 +52,34 @@ const sendOrderEmail = async (order: any) => {
     <h1>New Order Placed</h1>
     <p><strong>Order ID:</strong> ${order._id}</p>
     <p><strong>Payment Method:</strong> ${order.paymentMethod}</p>
+
     <p><strong>Shipping Address:</strong><br/>
       ${order.shippingAddress.fullName}<br/>
-      ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}, ${order.shippingAddress.country}<br/>
-      Phone: ${order.shippingAddress.phoneNumber}
+      <a href="${mapsUrl}" target="_blank" style="color: blue; text-decoration: underline;">
+        ${order.shippingAddress.address}, ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}, ${order.shippingAddress.country}
+      </a><br/>
+      Phone: ${order.shippingAddress.phoneNumber}<br/>
+      Email: ${order.shippingAddress.email}
     </p>
+
     <p><strong>Order Items:</strong></p>
-    <ul>${itemsHtml}</ul>
+    <table style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+      <thead>
+        <tr>
+          <th style="border: 1px solid #ddd; padding: 8px;">Image</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">Product</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">Quantity</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemsHtml}
+      </tbody>
+    </table>
+
     <p><strong>Total Price:</strong> ${order.totalPrice}</p>
   `;
 
-  // Send to admin + customer email (if available)
   const recipients = [process.env.ORDER_NOTIFICATION_EMAIL];
   if (order.shippingAddress.email) {
     recipients.push(order.shippingAddress.email);
@@ -54,7 +87,7 @@ const sendOrderEmail = async (order: any) => {
 
   await transporter.sendMail({
     from: `"Your Store" <${process.env.SMTP_USER}>`,
-    to: recipients.join(','), // send to multiple emails
+    to: recipients.join(','),
     subject: `New Order Received - ${order._id}`,
     html,
   });

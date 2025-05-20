@@ -20,8 +20,8 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const product = await productService.getBySlug(slug);
 
   if (!product) {
@@ -37,8 +37,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-const ProductPage = async ({ params }: { params: { slug: string } }) => {
-  const slug = params.slug;
+const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
   const product = await productService.getBySlug(slug);
 
   if (!product) {
@@ -53,11 +53,11 @@ const ProductPage = async ({ params }: { params: { slug: string } }) => {
   const topRated = await productService.getTopRated();
 
   return (
-  <ProductClient
-    product={convertDocToObj(product)}
-    base64={base64}
-    topRated={topRated.map(convertDocToObj)}
-  />
+    <ProductClient
+      product={convertDocToObj(product)}
+      base64={base64}
+      topRated={topRated.map(convertDocToObj)}
+    />
   );
 };
 

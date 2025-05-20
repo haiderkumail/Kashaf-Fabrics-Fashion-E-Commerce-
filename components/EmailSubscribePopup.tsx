@@ -49,7 +49,15 @@ const EmailSubscribePopup = ({ onClose }: { onClose: () => void }) => {
         </button>
         {!submitted ? (
           <>
-            <h2 className="text-xl font-semibold mb-4">Subscribe for Latest Updates!</h2>
+<h2
+  className="text-xl font-normal mb-4 uppercase whitespace-nowrap"
+  style={{ fontFamily: "'Montserrat', sans-serif" }}
+>
+  Subscribe for Latest Updates!
+</h2>
+
+
+
             <form onSubmit={handleSubmit}>
               <input
                 type="email"
@@ -60,12 +68,13 @@ const EmailSubscribePopup = ({ onClose }: { onClose: () => void }) => {
                 required
               />
               {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-              <button
-                type="submit"
-                className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
-              >
-                Subscribe
-              </button>
+<button
+  type="submit"
+  className="w-full bg-gradient-to-r from-black to-yellow-500 text-white py-2 rounded hover:from-gray-900 hover:to-yellow-400 transition"
+>
+  Subscribe
+</button>
+
             </form>
           </>
         ) : (
@@ -76,7 +85,7 @@ const EmailSubscribePopup = ({ onClose }: { onClose: () => void }) => {
             <p>We&apos;ll keep you updated with our latest products and offers.</p>
             <button
               onClick={onClose}
-              className="mt-4 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
+              className="w-full bg-gradient-to-r from-black to-yellow-500 text-white py-2 rounded hover:from-gray-900 hover:to-yellow-400 transition"
             >
               Close
             </button>

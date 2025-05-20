@@ -14,9 +14,9 @@ const nextConfig = {
   },
 
   // Add this to ignore TypeScript errors on build
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // typescript: {
+  //   ignoreBuildErrors: true,
+  // },
 };
 
 export default withPlaiceholder(nextConfig);
