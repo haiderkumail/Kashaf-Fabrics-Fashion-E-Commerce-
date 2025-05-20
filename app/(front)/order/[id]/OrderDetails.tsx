@@ -1,6 +1,5 @@
 'use client';
 
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
@@ -13,10 +12,9 @@ import { OrderItem } from '@/lib/models/OrderModel';
 
 interface IOrderDetails {
   orderId: string;
-  paypalClientId: string;
 }
 
-const OrderDetails = ({ orderId, paypalClientId }: IOrderDetails) => {
+const OrderDetails = ({ orderId }: IOrderDetails) => {
   const { data: session } = useSession();
   const { currency, convertPrice } = useCurrency(); // Access currency and converter
 
@@ -45,31 +43,6 @@ const OrderDetails = ({ orderId, paypalClientId }: IOrderDetails) => {
       res.ok ? toast.success('Marked as paid') : toast.error(data.message);
     }
   );
-
-  // Create PayPal Order
-  const createPayPalOrder = () =>
-    fetch(`/api/orders/${orderId}/create-paypal-order`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((response) => response.json())
-      .then((order) => order.id);
-
-  // On Approve PayPal Order
-  const onApprovePayPalOrder = async (data: any) => {
-    await fetch(`/api/orders/${orderId}/capture-paypal-order`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        toast.success('Order paid successfully');
-      })
-      .catch(() => {
-        toast.error('Payment capture failed');
-      });
-  };
 
   // Fetch Order Data
   const { data, error } = useSWR(`/api/orders/${orderId}`);
@@ -112,7 +85,6 @@ const OrderDetails = ({ orderId, paypalClientId }: IOrderDetails) => {
                 <div className="text-error">Not Delivered</div>
               )}
             </div>
-
           </div>
 
           {/* Payment Method */}
@@ -199,17 +171,7 @@ const OrderDetails = ({ orderId, paypalClientId }: IOrderDetails) => {
                   </div>
                 </li>
 
-                {!isPaid && paymentMethod === 'PayPal' && (
-                  <li>
-                    <PayPalScriptProvider options={{ clientId: paypalClientId }}>
-                      <PayPalButtons
-                        createOrder={createPayPalOrder}
-                        onApprove={onApprovePayPalOrder}
-                      />
-                    </PayPalScriptProvider>
-                  </li>
-                )}
-
+                {/* Admin actions */}
                 {session?.user.isAdmin && !isDelivered && (
                   <li>
                     <button
