@@ -46,7 +46,7 @@ export async function generateMetadata({
     page: string;
   };
 }) {
-  const { q = 'all', category = 'all', price = 'all', rating = 'all' } = searchParams;
+  const { q = 'all', category = 'all', price = 'all', rating = 'all' } = await searchParams;
 
   if (
     (q !== 'all' && q !== '') ||
@@ -55,10 +55,10 @@ export async function generateMetadata({
     price !== 'all'
   ) {
     return {
-      title: `Search ${q !== 'all' ? q : ''}
-              ${category !== 'all' ? ` : Category ${category}` : ''}
-              ${price !== 'all' ? ` : Price ${price}` : ''}
-              ${rating !== 'all' ? ` : Rating ${rating}` : ''}`,
+      title: Search ${q !== 'all' ? q : ''}
+              ${category !== 'all' ?  : Category ${category} : ''}
+              ${price !== 'all' ?  : Price ${price} : ''}
+              ${rating !== 'all' ?  : Rating ${rating} : ''},
     };
   } else {
     return {
@@ -79,14 +79,7 @@ export default async function SearchPage({
     page: string;
   };
 }) {
-  const {
-    q = 'all',
-    category = 'all',
-    price = 'all',
-    rating = 'all',
-    sort = 'newest',
-    page = '1',
-  } = searchParams;
+  const { q = 'all', category = 'all', price = 'all', rating = 'all', sort = 'newest', page = '1' } = await searchParams;
 
   const getFilterUrl = ({
     c,
@@ -107,7 +100,7 @@ export default async function SearchPage({
     if (r) params.rating = r;
     if (pg) params.page = pg;
     if (s) params.sort = s;
-    return `/search?${new URLSearchParams(params).toString()}`;
+    return /search?${new URLSearchParams(params).toString()};
   };
 
   const categories = await productServices.getCategories();
@@ -118,7 +111,7 @@ export default async function SearchPage({
     rating,
     page,
     sort,
-    limit: 4,
+    limit: 4, // ✅ Limit to 8 products per page regardless of screen size
   });
 
   if (!products) {
@@ -134,7 +127,7 @@ export default async function SearchPage({
             <div className="font-bold text-lg mb-2">Categories</div>
             <div className="flex flex-wrap gap-2">
               <Link
-                className={`btn btn-sm ${'all' === category ? 'btn-primary' : 'btn-ghost'}`}
+                className={btn btn-sm ${'all' === category ? 'btn-primary' : 'btn-ghost'}}
                 href={getFilterUrl({ c: 'all' })}
               >
                 Any
@@ -142,7 +135,7 @@ export default async function SearchPage({
               {categories.map((c: string) => (
                 <Link
                   key={c}
-                  className={`btn btn-sm ${c === category ? 'btn-primary' : 'btn-ghost'}`}
+                  className={btn btn-sm ${c === category ? 'btn-primary' : 'btn-ghost'}}
                   href={getFilterUrl({ c })}
                 >
                   {c}
@@ -155,7 +148,7 @@ export default async function SearchPage({
             <div className="font-bold text-lg mb-2">Price</div>
             <div className="flex flex-wrap gap-2">
               <Link
-                className={`btn btn-sm ${'all' === price ? 'btn-primary' : 'btn-ghost'}`}
+                className={btn btn-sm ${'all' === price ? 'btn-primary' : 'btn-ghost'}}
                 href={getFilterUrl({ p: 'all' })}
               >
                 Any
@@ -164,7 +157,7 @@ export default async function SearchPage({
                 <Link
                   key={p.value}
                   href={getFilterUrl({ p: p.value })}
-                  className={`btn btn-sm ${p.value === price ? 'btn-primary' : 'btn-ghost'}`}
+                  className={btn btn-sm ${p.value === price ? 'btn-primary' : 'btn-ghost'}}
                 >
                   {p.name}
                 </Link>
@@ -177,15 +170,15 @@ export default async function SearchPage({
             <div className="flex flex-col gap-2">
               <Link
                 href={getFilterUrl({ r: 'all' })}
-                className={`btn btn-sm ${'all' === rating ? 'btn-primary' : 'btn-ghost'}`}
+                className={btn btn-sm ${'all' === rating ? 'btn-primary' : 'btn-ghost'}}
               >
                 Any
               </Link>
               {ratings.map((r) => (
                 <Link
                   key={r}
-                  href={getFilterUrl({ r: `${r}` })}
-                  className={`btn btn-sm ${`${r}` === rating ? 'btn-primary' : 'btn-ghost'}`}
+                  href={getFilterUrl({ r: ${r} })}
+                  className={btn btn-sm ${${r} === rating ? 'btn-primary' : 'btn-ghost'}}
                 >
                   <div className="flex items-center gap-2">
                     <Rating value={r} caption={''} />
@@ -204,7 +197,7 @@ export default async function SearchPage({
           <ul>
             <li>
               <Link
-                className={`link-hover link ${'all' === category ? 'link-primary font-semibold underline' : ''}`}
+                className={link-hover link ${'all' === category ? 'link-primary font-semibold underline' : ''}}
                 href={getFilterUrl({ c: 'all' })}
               >
                 Any
@@ -213,7 +206,7 @@ export default async function SearchPage({
             {categories.map((c: string) => (
               <li key={c}>
                 <Link
-                  className={`link-hover link ${c === category ? 'link-primary font-semibold underline' : ''}`}
+                  className={link-hover link ${c === category ? 'link-primary font-semibold underline' : ''}}
                   href={getFilterUrl({ c })}
                 >
                   {c}
@@ -226,7 +219,7 @@ export default async function SearchPage({
             <ul>
               <li>
                 <Link
-                  className={`link-hover link ${'all' === price ? 'link-primary font-semibold underline' : ''}`}
+                  className={link-hover link ${'all' === price ? 'link-primary font-semibold underline' : ''}}
                   href={getFilterUrl({ p: 'all' })}
                 >
                   Any
@@ -236,7 +229,7 @@ export default async function SearchPage({
                 <li key={p.value}>
                   <Link
                     href={getFilterUrl({ p: p.value })}
-                    className={`link-hover link ${p.value === price ? 'link-primary font-semibold underline' : ''}`}
+                    className={link-hover link ${p.value === price ? 'link-primary font-semibold underline' : ''}}
                   >
                     {p.name}
                   </Link>
@@ -250,7 +243,7 @@ export default async function SearchPage({
               <li>
                 <Link
                   href={getFilterUrl({ r: 'all' })}
-                  className={`link-hover link ${'all' === rating ? 'link-primary font-semibold underline' : ''}`}
+                  className={link-hover link ${'all' === rating ? 'link-primary font-semibold underline' : ''}}
                 >
                   Any
                 </Link>
@@ -258,8 +251,8 @@ export default async function SearchPage({
               {ratings.map((r) => (
                 <li key={r}>
                   <Link
-                    href={getFilterUrl({ r: `${r}` })}
-                    className={`link-hover link ${`${r}` === rating ? 'link-primary font-semibold underline' : ''}`}
+                    href={getFilterUrl({ r: ${r} })}
+                    className={link-hover link ${${r} === rating ? 'link-primary font-semibold underline' : ''}}
                   >
                     <Rating caption={' & up'} value={r} />
                   </Link>
@@ -278,9 +271,9 @@ export default async function SearchPage({
               {price !== 'all' && ' : Price ' + price}
               {rating !== 'all' && ' : Rating ' + rating + ' & up'}
               {(q !== 'all' && q !== '') ||
-              category !== 'all' ||
-              rating !== 'all' ||
-              price !== 'all' ? (
+                category !== 'all' ||
+                rating !== 'all' ||
+                price !== 'all' ? (
                 <Link className="btn btn-ghost btn-sm" href="/search">
                   Clear
                 </Link>
@@ -291,7 +284,7 @@ export default async function SearchPage({
               {sortOrders.map((s) => (
                 <Link
                   key={s}
-                  className={`btn btn-sm ${sort === s ? 'btn-primary' : 'btn-ghost'}`}
+                  className={btn btn-sm ${sort === s ? 'btn-primary' : 'btn-ghost'}}
                   href={getFilterUrl({ s })}
                 >
                   {s.charAt(0).toUpperCase() + s.slice(1)}
@@ -309,23 +302,28 @@ export default async function SearchPage({
                       <ProductItem product={sanitizeProduct(product)} />
                     </div>
                   </div>
+
                 ))}
               </div>
             </div>
 
+            {/* Pagination */}
             <div className="join mt-5 flex flex-wrap justify-center">
               {products.length > 0 &&
                 Array.from(Array(pages).keys()).map((p) => (
                   <Link
                     key={p}
-                    className={`btn join-item ${Number(page) === p + 1 ? 'btn-active' : ''}`}
-                    href={getFilterUrl({ pg: `${p + 1}` })}
+                    className={btn join-item ${Number(page) === p + 1 ? 'btn-active' : ''}}
+                    href={getFilterUrl({ pg: ${p + 1} })}
                   >
                     {p + 1}
                   </Link>
                 ))}
             </div>
+
           </div>
+
+
         </div>
       </div>
     </div>
